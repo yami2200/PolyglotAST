@@ -23,12 +23,11 @@ public class App {
 
     public static void main(String[] args) throws IOException {
 
-        // String code = "import polyglot\n" 
-        // + "x = 42\n" 
-        // + "polyglot.export_value('test', x)\n"
-        // + "polyglot.eval(language='js', string='var x = 42; Polyglot.eval(\"python\", \"print(x)\")')";
-       Path srcPath = Path.of("/home/philemon/PROJET M1/Code/GraalSamples/polyglot_example.py");
-       String code = Files.readString(srcPath);
+        String code = "import polyglot\n" +
+        "polyglot.export_value(name=\"test\", value=3)\n" +
+        "x = polyglot.import_value(name=\"test\")\n" +
+        "print(x)\n" ;
+        
        
         PolyglotTreeHandler tree = new PolyglotTreeHandler(code);
         PolyglotTreePrinter p = new PolyglotTreePrinter();
