@@ -26,8 +26,9 @@ public class App {
         String code = "import polyglot\n" +
         "polyglot.export_value(name=\"test\", value=3)\n" +
         "x = polyglot.import_value(name=\"test\")\n" +
-        "print(x)\n" ;
-        
+        "print(x)\n" + 
+        "polyglot.eval(language=\"js\", string='var x = 42;\n console.log(x);' ";
+
        
         PolyglotTreeHandler tree = new PolyglotTreeHandler(code);
         PolyglotTreePrinter p = new PolyglotTreePrinter();
