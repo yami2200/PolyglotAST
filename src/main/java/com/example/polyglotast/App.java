@@ -24,12 +24,11 @@ public class App {
     public static void main(String[] args) throws IOException {
 
         String code = "import polyglot\n" +
-        "polyglot.export_value(name=\"test\", value=3)\n" +
+        "polyglot.export_value(name=\"test\", value=3)" +
         "x = polyglot.import_value(name=\"test\")\n" +
-        "print(x)\n" + 
-        "polyglot.eval(language=\"js\", string='var x = 42;\n console.log(x);' ";
+        "print(x)" +
+        "polyglot.eval(language=\"js\", string=\"var x = 42;\"\n\"console.log(x);\")";
 
-       
         PolyglotTreeHandler tree = new PolyglotTreeHandler(code);
         PolyglotTreePrinter p = new PolyglotTreePrinter();
         tree.apply(p);

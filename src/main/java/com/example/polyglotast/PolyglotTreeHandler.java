@@ -33,6 +33,7 @@ public class PolyglotTreeHandler {
      */
     public PolyglotTreeHandler(String code, String language) {
         this.evalNodesToSubtreesMap = new HashMap<>();
+        System.out.println("language: " + language);
         Language<NodeType> lang = Language.load(nodetype, language, "tree_sitter_" + language, "ts" + language,
                 Language.class.getClassLoader()); // throws UnsatisfiedLinkException if the language is not installed
         lang.register(nodetype);
@@ -40,6 +41,8 @@ public class PolyglotTreeHandler {
         this.code = code;
         this.tree = parser.parse(new StringText(this.code), null);
         this.cursor = this.tree.getRoot().zipper();
+        System.out.println(this.cursor.toSexp());
+        nodeToCode(this.cursor);
         this.insideSubtree = false;
         buildPolyglotTree(this.cursor);
     }
@@ -114,9 +117,8 @@ public class PolyglotTreeHandler {
                         System.out.println(subProgram);
                         break;
                     default:
-                        System.out.println("Something went wrong : " + zipper.getType().getName()
+                        throw new RuntimeException("Something went wrong : " + zipper.getType().getName()
                                 + " node was recognized as an eval node, but the subsequent nodes dont match known eval arguments");
-                        break;
                 }
 
                 switch (this.nodeToCode(arg2)) {
@@ -236,7 +238,7 @@ public class PolyglotTreeHandler {
     /**
      * Determines whether or not a given node is a polyglot import function call
      * 
-     * @param node The polyglot zipper of the node to be checked
+     * @param zip The polyglot zipper of the node to be checked
      * @return True if the node is an import function call in the language of this
      *         program
      */
@@ -268,7 +270,7 @@ public class PolyglotTreeHandler {
     /**
      * Determines whether or not a given node is a polyglot export function call
      * 
-     * @param node The polyglot zipper of the node to be checked
+     * @param zip The polyglot zipper of the node to be checked
      * @return True if the node is an export function call in the language of this
      *         program
      */

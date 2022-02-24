@@ -1,6 +1,7 @@
 .vscode
 .settings
 target/
+.idea/
 
 *.class
 *.log
