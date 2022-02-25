@@ -33,18 +33,26 @@ public class PolyglotTreeHandler {
      */
     public PolyglotTreeHandler(String code, String language) {
         this.evalNodesToSubtreesMap = new HashMap<>();
-        System.out.println("language: " + language);
-        Language<NodeType> lang = Language.load(nodetype, language, "tree_sitter_" + language, "ts" + language,
+        
+        Language<NodeType> lang = null;
+        try {
+            lang = Language.load(nodetype, language, "tree_sitter_" + language, "ts" + language,
                 Language.class.getClassLoader()); // throws UnsatisfiedLinkException if the language is not installed
-        lang.register(nodetype);
-        this.parser = lang.parser();
-        this.code = code;
-        this.tree = parser.parse(new StringText(this.code), null);
-        this.cursor = this.tree.getRoot().zipper();
-        System.out.println(this.cursor.toSexp());
-        nodeToCode(this.cursor);
-        this.insideSubtree = false;
-        buildPolyglotTree(this.cursor);
+        } catch (UnsatisfiedLinkError ule) {
+            System.err.println("Language " + language + " is not installed.");
+        } finally {
+            if (lang != null) {
+                lang.register(nodetype);
+                this.parser = lang.parser();
+                this.code = code;
+                this.tree = parser.parse(new StringText(this.code), null);
+                this.cursor = this.tree.getRoot().zipper();
+                System.out.println(this.cursor.toSexp());
+                nodeToCode(this.cursor);
+                this.insideSubtree = false;
+                buildPolyglotTree(this.cursor);
+            }
+        } 
     }
 
     public PolyglotTreeHandler(String code) {

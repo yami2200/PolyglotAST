@@ -142,4 +142,9 @@ public class PolyglotZipper {
         return this.node == null;
     }
 
+    @Override
+    public String toString() {
+        return this.node.toSexp();
+    }
+
 }
