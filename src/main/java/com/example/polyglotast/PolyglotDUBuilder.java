@@ -18,6 +18,7 @@ public class PolyglotDUBuilder implements PolyglotTreeProcessor {
     public PolyglotDUBuilder() {
         this.imports = new HashMap<>();
         this.exports = new HashMap<>();
+        this.visited = new LinkedList<PolyglotZipper>();
     }
 
     protected PolyglotDUBuilder(PolyglotDUBuilder parent) {
@@ -41,7 +42,7 @@ public class PolyglotDUBuilder implements PolyglotTreeProcessor {
     @Override
     public void process(PolyglotZipper zipper) {
         //TODO cycle detection
-        if (visited.contains(zipper)) {
+        if (zipper != null && visited.contains(zipper)) {
             System.err.println("cycle! " + zipper.toString());
         }
         this.visited.add(zipper);
