@@ -1,12 +1,7 @@
 package com.example.polyglotast;
 
-import com.sun.jna.Native;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Stack;
+
 
 import jsitter.api.Language;
 import jsitter.api.NodeType;
@@ -27,9 +22,9 @@ public class App {
         "polyglot.export_value(name=\"test\", value=3)\n" +
         "x = polyglot.import_value(name=\"test\")\n" +
         "print(x)\n" + 
-        "polyglot.eval(language=\"js\", string='var x = 42;\n console.log(x);' ";
+        "polyglot.eval(language=\"js\", string=\"var x = 42;\"\n\"console.log(x);\")";
+        // "polyglot.eval(string=\"var x = 42;\\n console.log(x); \", language=\"js\")";
 
-       
         PolyglotTreeHandler tree = new PolyglotTreeHandler(code);
         PolyglotTreePrinter p = new PolyglotTreePrinter();
         tree.apply(p);
