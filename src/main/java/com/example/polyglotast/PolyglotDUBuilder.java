@@ -13,12 +13,12 @@ public class PolyglotDUBuilder implements PolyglotTreeProcessor {
     private HashMap<String, LinkedList<Pair<Integer, Integer>>> imports;
     private HashMap<String, Pair<Integer, Integer>> exports;
     //Keeping track of nodes so we can identify cycles
-    private List<PolyglotZipper> visited;
+    private List<String> visited;
 
     public PolyglotDUBuilder() {
         this.imports = new HashMap<>();
         this.exports = new HashMap<>();
-        this.visited = new LinkedList<PolyglotZipper>();
+        this.visited = new LinkedList<String>();
     }
 
     protected PolyglotDUBuilder(PolyglotDUBuilder parent) {
@@ -41,12 +41,6 @@ public class PolyglotDUBuilder implements PolyglotTreeProcessor {
 
     @Override
     public void process(PolyglotZipper zipper) {
-        //TODO cycle detection
-        if (zipper != null && visited.contains(zipper)) {
-            System.err.println("cycle! " + zipper.toString());
-        }
-        this.visited.add(zipper);
-
         if (zipper.isImport()) {
             String name = zipper.getBindingName();
             if (!this.imports.containsKey(name)) {
@@ -60,8 +54,10 @@ public class PolyglotDUBuilder implements PolyglotTreeProcessor {
 
         PolyglotZipper next = zipper.down();
         while (!next.isNull()) {
+            //PolyglotDUBuilder nextp = new PolyglotDUBuilder(this);
+            //nextp.process(next);
+            //this.updateMaps(nextp);
             this.process(next);
-
             next = next.right();
         }
     }
@@ -82,9 +78,4 @@ public class PolyglotDUBuilder implements PolyglotTreeProcessor {
             }
         }
     }
-
-    public void printCycles() {
-        System.err.println("Not Yet Implemented: print cycles in PolyglotAST");
-    }
-
 }
