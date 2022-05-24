@@ -111,16 +111,16 @@ public class PolyglotZipper {
 
     public String getBindingName() {
         if(this.isImport() || this.isExport()) {
+            // System.out.println("this.getLang:" + this.getLang());
             switch (this.getLang()) {
                 case "python":
                     return this.currentTree.nodeToCode(this.node.down().right().down().right());
                 case "javascript":
-
-                    break;
+                    //coincidentally the same as python, but better to keep explicitly separate
+                    return this.currentTree.nodeToCode(this.node.down().right().down().right());
                 default:
                     throw new AssertionError();
             }
-            return "";
         } else {
             return null;
         }
@@ -140,6 +140,11 @@ public class PolyglotZipper {
 
     public boolean isNull() {
         return this.node == null;
+    }
+
+    @Override
+    public String toString() {
+        return this.node.toString();
     }
 
 }

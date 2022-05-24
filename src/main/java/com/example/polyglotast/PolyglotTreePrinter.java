@@ -29,7 +29,7 @@ public class PolyglotTreePrinter implements PolyglotTreeProcessor {
         }
         PolyglotZipper next = zipper.down();
         while (!next.isNull()) {
-            PolyglotTreePrinter nextp    = new PolyglotTreePrinter("|  " + this.indent);
+            PolyglotTreePrinter nextp = new PolyglotTreePrinter("|  " + this.indent);
             nextp.process(next);
             this.result += nextp.getRes();
             next = next.right();

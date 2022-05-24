@@ -47,15 +47,27 @@ public class PolyglotTreeHandler {
     public PolyglotTreeHandler(String code, String language, Path prefix) {
         this.pathPrefix = prefix;
         this.evalNodesToSubtreesMap = new HashMap<>();
-        Language<NodeType> lang = Language.load(nodetype, language, "tree_sitter_" + language, "ts" + language,
-                Language.class.getClassLoader()); // throws UnsatisfiedLinkException if the language is not installed
-        lang.register(nodetype);
-        this.parser = lang.parser();
-        this.code = code;
-        this.tree = parser.parse(new StringText(this.code), null);
-        this.cursor = this.tree.getRoot().zipper();
-        this.insideSubtree = false;
-        buildPolyglotTree(this.cursor);
+
+        Language<NodeType> lang = null;
+        try {
+            lang = Language.load(nodetype, language, "tree_sitter_" + language, "ts" + language,
+                    Language.class.getClassLoader()); // throws UnsatisfiedLinkException if the language is not
+                                                      // installed
+        } catch (UnsatisfiedLinkError ule) {
+            System.err.println("Language " + language + " is not installed.");
+        } finally {
+            if (lang != null) {
+                lang.register(nodetype);
+                this.parser = lang.parser();
+                this.code = code;
+                this.tree = parser.parse(new StringText(this.code), null);
+                this.cursor = this.tree.getRoot().zipper();
+                // System.out.println(this.cursor.toString());
+                // nodeToCode(this.cursor);
+                this.insideSubtree = false;
+                buildPolyglotTree(this.cursor);
+            }
+        }
     }
 
     /**
@@ -144,10 +156,10 @@ public class PolyglotTreeHandler {
                         subProgram = subProgram.substring(1, subProgram.length() - 1);
                         // System.out.println(subProgram);
                         break;
-                    default:
+                    default: // we dont throw an exception to let the framework attempt to build the rest of
+                             // the tree
                         System.out.println("Something went wrong : " + zipper.getType().getName()
                                 + " node was recognized as an eval node, but the subsequent nodes dont match known eval arguments");
-                        break;
                 }
 
                 switch (this.nodeToCode(arg2)) {
@@ -186,7 +198,8 @@ public class PolyglotTreeHandler {
                         subProgram = subProgram.substring(1, subProgram.length() - 1);
                         // System.out.println(subProgram);
                         break;
-                    default:
+                    default: // we dont throw an exception to let the framework attempt to build the rest of
+                             // the tree
                         System.out.println("Something went wrong : " + zipper.getType().getName()
                                 + " node was recognized as an eval node, but the subsequent nodes dont match known eval arguments");
 
@@ -257,9 +270,9 @@ public class PolyglotTreeHandler {
         newLang = mapTSLangToGraalLang(newLang);
         PolyglotTreeHandler newSubTree;
         if (newPathPrefix != null) {
-            newSubTree = new PolyglotTreeHandler(subProgram, newLang, newPathPrefix); 
+            newSubTree = new PolyglotTreeHandler(subProgram, newLang, newPathPrefix);
         } else {
-            newSubTree= new PolyglotTreeHandler(subProgram, newLang, this.pathPrefix);
+            newSubTree = new PolyglotTreeHandler(subProgram, newLang, this.pathPrefix);
         }
         this.evalNodesToSubtreesMap.put(zipper.getNode(), newSubTree);
         assert this.evalNodesToSubtreesMap.containsKey(node.getNode());
@@ -323,7 +336,7 @@ public class PolyglotTreeHandler {
     /**
      * Determines whether or not a given node is a polyglot import function call
      * 
-     * @param node The polyglot zipper of the node to be checked
+     * @param zip The polyglot zipper of the node to be checked
      * @return True if the node is an import function call in the language of this
      *         program
      */
@@ -355,7 +368,7 @@ public class PolyglotTreeHandler {
     /**
      * Determines whether or not a given node is a polyglot export function call
      * 
-     * @param node The polyglot zipper of the node to be checked
+     * @param zip The polyglot zipper of the node to be checked
      * @return True if the node is an export function call in the language of this
      *         program
      */

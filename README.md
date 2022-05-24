@@ -1,9 +1,24 @@
 This repository contains tools to build polyglot ASTs from source code of GraalVM applications. It currently partially supports python and javascript, and is built in a manner that aims to facilitate addition of new languages.  
 You will need JSitter in order to be able to run the project, which is available at https://github.com/JetBrains/jsitter  
 
-There are two main classes to be looking at.
+There are two main classes to be looking at; they are introduced after the _getting started_ below.
 
-# PolyglotTreeHandler
+# Getting started
+
+0. Highest recommendation to run on Linux. MacOS should be possible, but it's just a pain.
+1. For jsitter, clone the jsitter repo: https://github.com/quentinLeDilavrec/jsitter
+2. Fix the merge conflict in jsitter/native/tree_sitter/lib/include/tree_sitter/api.h around line 670 (take the HEAD)
+3. In jsitter/native, edit the file CMakeLists.txt to add the python and javascript libraries: add_library(tspython SHARED grammars/tree-sitter-python/src/parser.c grammars/tree-sitter-python/src/scanner.cc), and the same for javascript. Don't forget to add "ts_python" and "tsjavascript" as arguments at the bottom in target_link_libraries.
+4. In jsitter/native/grammars, git clone the tree-sitter-python and tree-sitter-javascript grammars (from https://github.com/tree-sitter/tree-sitter-python, for other languages, replace python with language name).
+5. In jsitter, run ./make.sh
+6. In jsitter, run mvn install
+7. Copy the generated .so files to the polyglot project: cp jsitter/native/build/linux-x86-64/\*.so PolyglotAST/src/main/resources/
+8. In the PolyglotAST folder, run mvn clean compile
+9. Now you can run App.java and start developing on top of it.
+
+# Classes of interest
+
+## PolyglotTreeHandler
 
 This class mainly acts as a wrapper for a tree-sitter object, that has methods to help handle polyglot-specific functions. 
 
@@ -13,11 +28,11 @@ The main functions to look at are `makePolyglotSubtree`, `isPolyglotEvalCall`, `
 
 The other three functions mark nodes that are related to polyglot by returning a boolean. They are mainly a public interface for users of the framework, but require extension whenever a language is added.
 
-# PolyglotZipper
+## PolyglotZipper
 
 This class acts as a wrapper for tree-sitter zipper object, which allows navigation of an AST through the `up`, `left`, `right` and `down` primitives. Those calls are reimplemented to allow similar usage of a polyglot AST without having to significantly acknowledge the polyglot nature of the AST, by leveraging the built polyglot tree handler it operates on; in addition, polyglot zippers provide functions to mark polyglot related nodes as such.
 
-# Other classes
+## Other classes
 
 The other classes in the project give examples of services that could be implemented onto this framework in order to provide code analysis features. They are essentially dummy use-cases to demonstrate how to make use of the two main classes.
 
