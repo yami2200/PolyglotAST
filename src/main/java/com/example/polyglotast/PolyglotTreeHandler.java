@@ -1,5 +1,8 @@
 package com.example.polyglotast;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -16,6 +19,7 @@ import kotlin.Pair;
 
 public class PolyglotTreeHandler {
     protected NodeType nodetype = new NodeType("source_file");
+    protected Path pathPrefix = null;
     protected String code;
     protected Parser<?> parser;
     protected Tree<?> tree;
@@ -32,6 +36,16 @@ public class PolyglotTreeHandler {
      * @param language The language the code is written in
      */
     public PolyglotTreeHandler(String code, String language) {
+        this(code, language, null);
+    }
+
+    public PolyglotTreeHandler(String code) {
+        this(code, "python"); // default to python parser without a specified language
+
+    }
+
+    public PolyglotTreeHandler(String code, String language, Path prefix) {
+        this.pathPrefix = prefix;
         this.evalNodesToSubtreesMap = new HashMap<>();
         Language<NodeType> lang = Language.load(nodetype, language, "tree_sitter_" + language, "ts" + language,
                 Language.class.getClassLoader()); // throws UnsatisfiedLinkException if the language is not installed
@@ -42,11 +56,6 @@ public class PolyglotTreeHandler {
         this.cursor = this.tree.getRoot().zipper();
         this.insideSubtree = false;
         buildPolyglotTree(this.cursor);
-    }
-
-    public PolyglotTreeHandler(String code) {
-        this(code, "python"); // default to python parser without a specified language
-
     }
 
     /**
@@ -90,28 +99,50 @@ public class PolyglotTreeHandler {
     private void makePolyglotSubtree(Zipper<?> zipper) { // TW : nested switches ahead
         String newLang = "";
         String subProgram = "";
+        Path newPathPrefix = null;
         Zipper<?> node = null;
         switch (this.parser.getLanguage().getName()) {
-            case "python":
+            // first level of cases identify which language we're working with; this is a
+            // property of the AST itself
+            case "python": // TODO : handle identifier-passed strings
                 Zipper<?> arg1 = zipper.down().right().down().right().down(); // this selects the keyword identifier
                                                                               // (which is required) of the first
                                                                               // argument
                 Zipper<?> arg2 = zipper.down().right().down().right().right().right().down(); // same thing, but for the
                                                                                               // second
-                // argument
+                // Python specifies arguments with their names, so we need to check for each one
+                // with all possibilities in mind
                 switch (this.nodeToCode(arg1)) {
                     case "language":
                         newLang = this.nodeToCode(arg1.right().right());
                         newLang = newLang.substring(1, newLang.length() - 1);
-                        System.out.println(newLang);
+                        // System.out.println(newLang);
                         break;
-                    case "path": // TODO : load source code from a given file
+                    case "path":
+                        node = arg1.right().right();
+                        String path = this.nodeToCode(node);
+                        Path fileName;
+
+                        if (this.pathPrefix != null) { // check if we have a relative directory to work from
+                            fileName = this.pathPrefix.resolve(path.substring(1, path.length() - 1));
+                        } else {
+                            fileName = Path.of(path.substring(1, path.length() - 1));
+                        }
+                        newPathPrefix = fileName.getParent(); // retrieve next relative directory
+                        try {
+                            subProgram = Files.readString(fileName);
+                        } catch (IOException e) {
+                            System.out.println(
+                                    "Attempting to read a polyglot subfile " + fileName.toString()
+                                            + " that does not exist; corresponding subtree will be empty");
+                        }
+
                         break;
-                    case "string": // TODO : handle identifier-passed strings
+                    case "string":
                         node = arg1.right().right();
                         subProgram = this.nodeToCode(node);
                         subProgram = subProgram.substring(1, subProgram.length() - 1);
-                        System.out.println(subProgram);
+                        // System.out.println(subProgram);
                         break;
                     default:
                         System.out.println("Something went wrong : " + zipper.getType().getName()
@@ -123,17 +154,37 @@ public class PolyglotTreeHandler {
                     case "language":
                         newLang = this.nodeToCode(arg2.right().right());
                         newLang = newLang.substring(1, newLang.length() - 1);
-                        System.out.println(newLang);
+                        // System.out.println(newLang);
                         break;
-                    case "path": // TODO : load source code from a given file
+                    case "path":
+                        node = arg2.right().right();
+                        String path = this.nodeToCode(node);
+                        Path fileName;
+
+                        if (this.pathPrefix != null) { // check if we have a relative directory to work from
+                            fileName = this.pathPrefix.resolve(path.substring(1, path.length() - 1));
+                        } else {
+                            fileName = Path.of(path.substring(1, path.length() - 1));
+                        }
+                        newPathPrefix = fileName.getParent(); // retrieve next relative directory
+                        try {
+                            subProgram = Files.readString(fileName);
+                        } catch (IOException e1) {
+
+                            System.out.println(
+                                    "Attempting to read a polyglot subfile " + fileName.toString()
+                                            + " that does not exist; corresponding subtree will be empty");
+
+                        }
+                        System.out.println("filename:" + fileName.toString());
                         break;
-                    case "string": // TODO : handle identifier-passed strings
+                    case "string":
                         node = arg2.right().right();
 
                         subProgram = this.nodeToCode(node);
 
                         subProgram = subProgram.substring(1, subProgram.length() - 1);
-                        System.out.println(subProgram);
+                        // System.out.println(subProgram);
                         break;
                     default:
                         System.out.println("Something went wrong : " + zipper.getType().getName()
@@ -143,8 +194,11 @@ public class PolyglotTreeHandler {
                 }
 
                 break;
-            case "javascript":
-                switch (this.nodeToCode(zipper.down().down().right().right())) { // file or string-based eval call
+
+            case "javascript": // TODO : handle identifier-passed strings
+                // JS uses different subfunctions for code execution, so
+                // we can check whether this is a file or string based eval call
+                switch (this.nodeToCode(zipper.down().down().right().right())) {
                     case "eval":
                         newLang = this.nodeToCode(zipper.down().right().down().right());
                         newLang = newLang.substring(1, newLang.length() - 1);
@@ -155,14 +209,41 @@ public class PolyglotTreeHandler {
                                 subProgram = this.nodeToCode(node);
                                 subProgram = subProgram.substring(1, subProgram.length() - 1);
                                 break;
-                            case "identifier": // TODO : handle variable-passed argument
+                            case "identifier": // TODO : handle identifier-passed strings
                                 break;
                             default:
                                 break;
                         }
 
                         break;
-                    case "evalFile": // TODO : support reading code from files
+                    case "evalFile":
+                        newLang = this.nodeToCode(zipper.down().right().down().right());
+                        newLang = newLang.substring(1, newLang.length() - 1);
+
+                        node = zipper.down().right().down().right().right().right();
+                        switch (node.getType().getName()) {
+                            case "string":
+                                String path = this.nodeToCode(node);
+                                Path fileName;
+                                if (this.pathPrefix != null) { // check if we have a relative directory to work from
+                                    fileName = this.pathPrefix.resolve(path.substring(1, path.length() - 1));
+                                } else {
+                                    fileName = Path.of(path.substring(1, path.length() - 1));
+                                }
+                                newPathPrefix = fileName.getParent(); // retrieve next relative directory
+                                try {
+                                    subProgram = Files.readString(fileName);
+                                } catch (IOException e) {
+                                    System.out.println(
+                                            "Attempting to read a polyglot subfile " + fileName.toString()
+                                                    + " that does not exist; corresponding subtree will be empty");
+                                }
+                                break;
+                            case "identifier": // TODO : handle identifier-passed strings
+                                break;
+                            default:
+                                break;
+                        }
                         break;
                     default:
                         break;
@@ -171,9 +252,15 @@ public class PolyglotTreeHandler {
             default:
                 throw new AssertionError();
         }
-        assert !newLang.equals("") && node != null;
+
+        assert !newLang.equals("") && node != null; // check everything went right
         newLang = mapTSLangToGraalLang(newLang);
-        PolyglotTreeHandler newSubTree = new PolyglotTreeHandler(subProgram, newLang);
+        PolyglotTreeHandler newSubTree;
+        if (newPathPrefix != null) {
+            newSubTree = new PolyglotTreeHandler(subProgram, newLang, newPathPrefix); 
+        } else {
+            newSubTree= new PolyglotTreeHandler(subProgram, newLang, this.pathPrefix);
+        }
         this.evalNodesToSubtreesMap.put(zipper.getNode(), newSubTree);
         assert this.evalNodesToSubtreesMap.containsKey(node.getNode());
         System.out.println("Added new polyglot transition on node " + node.getNode().hashCode());
@@ -431,8 +518,8 @@ public class PolyglotTreeHandler {
         int length = node.getByteSize() / 2;
         int lineCount = 0;
         int offset = 0;
-        for(int i = 0; i < pos; i++) {
-            if(this.code.charAt(i) == '\n') {
+        for (int i = 0; i < pos; i++) {
+            if (this.code.charAt(i) == '\n') {
                 lineCount++;
                 offset = 0;
             } else {

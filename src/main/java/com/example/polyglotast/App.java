@@ -22,7 +22,7 @@ public class App {
         "polyglot.export_value(name=\"test\", value=3)\n" +
         "x = polyglot.import_value(name=\"test\")\n" +
         "print(x)\n" + 
-        "polyglot.eval(language=\"js\", string=\"var x = 42;\"\n\"console.log(x);\")";
+        "polyglot.eval(language=\"js\", path=\"GraalSamples/arraysort.js\")";
         // "polyglot.eval(string=\"var x = 42;\\n console.log(x); \", language=\"js\")";
 
         PolyglotTreeHandler tree = new PolyglotTreeHandler(code);
@@ -33,7 +33,7 @@ public class App {
         tree.apply(du);
         System.out.println(du.getExports());
         System.out.println(du.getImports());
-        
+       
         
     }
 
