@@ -43,6 +43,15 @@ public class PolyglotTreeHandler {
         this(code, "python"); // default to python parser without a specified language
 
     }
+    public PolyglotTreeHandler(Path fileName) throws IOException {
+        this(fileName, "python");
+    }
+
+    public PolyglotTreeHandler(Path fileName, String language) throws IOException {
+        this(Files.readString(fileName),
+                language,
+                fileName.getParent());
+    }
 
     public PolyglotTreeHandler(String code, String language, Path prefix) {
         this.pathPrefix = prefix;
