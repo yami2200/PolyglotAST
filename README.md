@@ -1,5 +1,4 @@
-This repository contains tools to build polyglot ASTs from source code of GraalVM applications. It currently partially supports python and javascript, and is built in a manner that aims to facilitate addition of new languages.  
-You will need JSitter in order to be able to run the project, which is available at https://github.com/JetBrains/jsitter  
+This repository contains tools to build polyglot ASTs from source code of GraalVM applications. It currently partially supports python and javascript, and is built in a manner that aims to facilitate addition of new languages.
 
 There are two main classes to be looking at; they are introduced after the _getting started_ below.
 
@@ -7,14 +6,15 @@ There are two main classes to be looking at; they are introduced after the _gett
 
 0. Highest recommendation to run on Linux. MacOS should be possible, but it's just a pain.
 1. For jsitter, clone the jsitter repo: https://github.com/quentinLeDilavrec/jsitter
-2. Fix the merge conflict in jsitter/native/tree_sitter/lib/include/tree_sitter/api.h around line 670 (take the HEAD)
-3. In jsitter/native, edit the file CMakeLists.txt to add the python and javascript libraries: add_library(tspython SHARED grammars/tree-sitter-python/src/parser.c grammars/tree-sitter-python/src/scanner.cc), and the same for javascript. Don't forget to add "ts_python" and "tsjavascript" as arguments at the bottom in target_link_libraries.
-4. In jsitter/native/grammars, git clone the tree-sitter-python and tree-sitter-javascript grammars (from https://github.com/tree-sitter/tree-sitter-python, for other languages, replace python with language name).
-5. In jsitter, run ./make.sh
-6. In jsitter, run mvn install
-7. Copy the generated .so files to the polyglot project: cp jsitter/native/build/linux-x86-64/\*.so PolyglotAST/src/main/resources/
-8. In the PolyglotAST folder, run mvn clean compile
-9. Now you can run App.java and start developing on top of it.
+2. For tree-sitter, clone the tree-sitter repo : https://github.com/quentinLeDilavrec/tree-sitter, and put it in jsitter/native/tree-sitter
+3. Fix the merge conflict in jsitter/native/tree_sitter/lib/include/tree_sitter/api.h around line 670 (by removing extra lines like "<<<<< HEAD" and ">>>>> ...", just care that you don't have two ts_tree_cursor_copy declaration)
+4. In jsitter/native, edit the file CMakeLists.txt to add the python and javascript libraries: add_library(tspython SHARED grammars/tree-sitter-python/src/parser.c grammars/tree-sitter-python/src/scanner.cc), and the same for javascript. Don't forget to add "ts_python" and "tsjavascript" as arguments at the bottom in target_link_libraries.
+5. In jsitter/native/grammars, git clone the tree-sitter-python and tree-sitter-javascript grammars (from https://github.com/tree-sitter/tree-sitter-python, for other languages, replace python with language name).
+6. In jsitter, run ./make.sh
+7. In jsitter, run mvn install
+8. Copy the generated .so files to the polyglot project: cp jsitter/native/build/linux-x86-64/\*.so PolyglotAST/src/main/resources/
+9. In the PolyglotAST folder, run mvn clean compile
+10. Now you can run App.java and start developing on top of it.
 
 # Classes of interest
 
