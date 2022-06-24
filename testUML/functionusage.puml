@@ -1,0 +1,235 @@
+@startuml
+object "AST" as AST
+object "program" as program0
+AST -down-> program0
+object "expression_statement" as expression_statement1
+program0 -down-> expression_statement1
+object "polyglot_eval_call" as polyglot_eval_call2
+expression_statement1 -down-> polyglot_eval_call2
+object "module" as module3
+polyglot_eval_call2 -down-> module3
+object "import_statement" as import_statement4
+module3 -down-> import_statement4
+object "import" as 5
+5 : import((0, 0))
+import_statement4 -down-> 5
+object "dotted_name" as dotted_name6
+import_statement4 -down-> dotted_name6
+object "identifier" as 7
+7 : polyglot((0, 7))
+dotted_name6 -down-> 7
+object "function_definition" as function_definition8
+module3 -down-> function_definition8
+object "def" as 9
+9 : def((2, 0))
+function_definition8 -down-> 9
+object "identifier" as 10
+10 : foo((2, 4))
+function_definition8 -down-> 10
+object "parameters" as parameters11
+function_definition8 -down-> parameters11
+object "(" as 12
+12 : (((2, 7))
+parameters11 -down-> 12
+object "identifier" as 13
+13 : x((2, 8))
+parameters11 -down-> 13
+object "," as 14
+14 : ,((2, 9))
+parameters11 -down-> 14
+object "identifier" as 15
+15 : y((2, 11))
+parameters11 -down-> 15
+object ")" as 16
+16 : )((2, 12))
+parameters11 -down-> 16
+object ":" as 17
+17 : :((2, 13))
+function_definition8 -down-> 17
+object "block" as block18
+function_definition8 -down-> block18
+object "return_statement" as return_statement19
+block18 -down-> return_statement19
+object "return" as 20
+20 : return((3, 4))
+return_statement19 -down-> 20
+object "binary_operator" as binary_operator21
+return_statement19 -down-> binary_operator21
+object "binary_operator" as binary_operator22
+binary_operator21 -down-> binary_operator22
+object "identifier" as 23
+23 : x((3, 11))
+binary_operator22 -down-> 23
+object "**" as 24
+24 : **((3, 12))
+binary_operator22 -down-> 24
+object "integer" as 25
+25 : 2((3, 14))
+binary_operator22 -down-> 25
+object "+" as 26
+26 : +((3, 16))
+binary_operator21 -down-> 26
+object "binary_operator" as binary_operator27
+binary_operator21 -down-> binary_operator27
+object "identifier" as 28
+28 : y((3, 18))
+binary_operator27 -down-> 28
+object "**" as 29
+29 : **((3, 19))
+binary_operator27 -down-> 29
+object "integer" as 30
+30 : 2((3, 21))
+binary_operator27 -down-> 30
+object "expression_statement" as expression_statement31
+module3 -down-> expression_statement31
+object "polyglot_export_call" as polyglot_export_call32
+expression_statement31 -down-> polyglot_export_call32
+object "attribute" as attribute33
+polyglot_export_call32 -down-> attribute33
+object "identifier" as 34
+34 : polyglot((6, 0))
+attribute33 -down-> 34
+object "." as 35
+35 : .((6, 8))
+attribute33 -down-> 35
+object "identifier" as 36
+36 : export_value((6, 9))
+attribute33 -down-> 36
+object "argument_list" as argument_list37
+polyglot_export_call32 -down-> argument_list37
+object "(" as 38
+38 : (((6, 21))
+argument_list37 -down-> 38
+object "keyword_argument" as keyword_argument39
+argument_list37 -down-> keyword_argument39
+object "identifier" as 40
+40 : value((6, 22))
+keyword_argument39 -down-> 40
+object "=" as 41
+41 : =((6, 27))
+keyword_argument39 -down-> 41
+object "identifier" as 42
+42 : foo((6, 28))
+keyword_argument39 -down-> 42
+object "," as 43
+43 : ,((6, 31))
+argument_list37 -down-> 43
+object "keyword_argument" as keyword_argument44
+argument_list37 -down-> keyword_argument44
+object "identifier" as 45
+45 : name((6, 33))
+keyword_argument44 -down-> 45
+object "=" as 46
+46 : =((6, 37))
+keyword_argument44 -down-> 46
+object "string" as string47
+keyword_argument44 -down-> string47
+object "'" as 48
+48 : '((6, 38))
+string47 -down-> 48
+object "'" as 49
+49 : '((6, 42))
+string47 -down-> 49
+object ")" as 50
+50 : )((6, 43))
+argument_list37 -down-> 50
+object ";" as 51
+51 : ;((0, 45))
+expression_statement1 -down-> 51
+object "variable_declaration" as variable_declaration52
+program0 -down-> variable_declaration52
+object "var" as 53
+53 : var((2, 0))
+variable_declaration52 -down-> 53
+object "variable_declarator" as variable_declarator54
+variable_declaration52 -down-> variable_declarator54
+object "identifier" as 55
+55 : foo((2, 4))
+variable_declarator54 -down-> 55
+object "=" as 56
+56 : =((2, 8))
+variable_declarator54 -down-> 56
+object "polyglot_import_call" as polyglot_import_call57
+variable_declarator54 -down-> polyglot_import_call57
+object "member_expression" as member_expression58
+polyglot_import_call57 -down-> member_expression58
+object "identifier" as 59
+59 : Polyglot((2, 10))
+member_expression58 -down-> 59
+object "." as 60
+60 : .((2, 18))
+member_expression58 -down-> 60
+object "property_identifier" as 61
+61 : import((2, 19))
+member_expression58 -down-> 61
+object "arguments" as arguments62
+polyglot_import_call57 -down-> arguments62
+object "(" as 63
+63 : (((2, 25))
+arguments62 -down-> 63
+object "string" as string64
+arguments62 -down-> string64
+object "'" as 65
+65 : '((2, 26))
+string64 -down-> 65
+object "string_fragment" as 66
+66 : foo((2, 27))
+string64 -down-> 66
+object "'" as 67
+67 : '((2, 30))
+string64 -down-> 67
+object ")" as 68
+68 : )((2, 31))
+arguments62 -down-> 68
+object ";" as 69
+69 : ;((2, 32))
+variable_declaration52 -down-> 69
+object "expression_statement" as expression_statement70
+program0 -down-> expression_statement70
+object "call_expression" as call_expression71
+expression_statement70 -down-> call_expression71
+object "member_expression" as member_expression72
+call_expression71 -down-> member_expression72
+object "identifier" as 73
+73 : console((5, 0))
+member_expression72 -down-> 73
+object "." as 74
+74 : .((5, 7))
+member_expression72 -down-> 74
+object "property_identifier" as 75
+75 : log((5, 8))
+member_expression72 -down-> 75
+object "arguments" as arguments76
+call_expression71 -down-> arguments76
+object "(" as 77
+77 : (((5, 11))
+arguments76 -down-> 77
+object "call_expression" as call_expression78
+arguments76 -down-> call_expression78
+object "identifier" as 79
+79 : foo((5, 12))
+call_expression78 -down-> 79
+object "arguments" as arguments80
+call_expression78 -down-> arguments80
+object "(" as 81
+81 : (((5, 15))
+arguments80 -down-> 81
+object "number" as 82
+82 : 1((5, 16))
+arguments80 -down-> 82
+object "," as 83
+83 : ,((5, 17))
+arguments80 -down-> 83
+object "number" as 84
+84 : 2((5, 19))
+arguments80 -down-> 84
+object ")" as 85
+85 : )((5, 20))
+arguments80 -down-> 85
+object ")" as 86
+86 : )((5, 21))
+arguments76 -down-> 86
+object ";" as 87
+87 : ;((5, 22))
+expression_statement70 -down-> 87
+@enduml
