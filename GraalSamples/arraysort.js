@@ -5,5 +5,5 @@ Polyglot.export('tableau', myArray)
 Polyglot.evalFile('python', 'arraysort.py')
 
 console.log("Displaying the array in JS again after it was 'sorted' in python :")
-console.log(myArray) 
+console.log(myArray)
 

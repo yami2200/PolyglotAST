@@ -1,4 +1,3 @@
-
 Polyglot.evalFile('python', 'objectexample.py');
 
 var john = Polyglot.import('John');

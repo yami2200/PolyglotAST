@@ -1,4 +1,3 @@
-
 import polyglot
 
 class TestSubject:
