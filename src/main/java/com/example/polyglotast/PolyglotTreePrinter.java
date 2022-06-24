@@ -72,7 +72,7 @@ public class PolyglotTreePrinter implements PolyglotTreeProcessor {
      * @throws IOException
      */
     public void printUMLInFile(String filename) throws IOException {
-        File file = new File("testUML/"+filename);
+        File file = new File("UMLrepresentations/"+filename);
         file.createNewFile(); // if file already exists will do nothing
         FileOutputStream out = new FileOutputStream(file, false);
         out.write(this.getResAsPUML().getBytes());

@@ -6,4 +6,4 @@ target/
 *.class
 *.log
 /src/main/resources/
-/testUML/
+/UMLrepresentations/
