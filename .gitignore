@@ -7,3 +7,6 @@ target/
 *.log
 /src/main/resources/
 /UMLrepresentations/
+/.attach_pid49985
+/PolyglotAST.iml
+/deploy.sh
