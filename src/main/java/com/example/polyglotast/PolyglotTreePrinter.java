@@ -91,6 +91,7 @@ public class PolyglotTreePrinter implements PolyglotTreeProcessor {
 
     @Override
     public void process(PolyglotZipper zipper) {
+        this.result = "";
         if (zipper.down().isNull()) {
             this.result += this.indent + zipper.getType() + " : " + zipper.getCode() + "(" + zipper.getPosition() + ")\n";
             return;
