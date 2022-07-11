@@ -10,3 +10,4 @@ target/
 /.attach_pid49985
 /PolyglotAST.iml
 /deploy.sh
+/deployWithServer.sh

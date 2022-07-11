@@ -14,7 +14,8 @@ import kotlin.Pair;
 public class PolyglotZipper {
 
     protected PolyglotTreeHandler currentTree;
-    protected Zipper<?> node;
+    public Zipper<?> node;
+
 
     public PolyglotZipper(PolyglotTreeHandler tree, Zipper<?> node) {
         this.currentTree = tree;
@@ -111,8 +112,7 @@ public class PolyglotZipper {
 
     public String getBindingName() {
         if(this.isImport() || this.isExport()) {
-            // System.out.println("this.getLang:" + this.getLang());
-            switch (this.getLang()) {
+                        switch (this.getLang()) {
                 case "python":
                     return this.currentTree.nodeToCode(this.node.down().right().down().right());
                 case "javascript":
@@ -145,6 +145,10 @@ public class PolyglotZipper {
     @Override
     public String toString() {
         return this.node.toString();
+    }
+
+    public PolyglotTreeHandler getCurrentTree() {
+        return currentTree;
     }
 
 }

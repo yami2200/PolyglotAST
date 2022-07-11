@@ -1,57 +1,96 @@
 package com.example.polyglotast;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-//import jdk.jfr.Name;
-import kotlin.Pair;
+import java.nio.file.Path;
+import java.util.*;
+
+import com.example.polyglotast.utils.ExportData;
+import com.example.polyglotast.utils.ExportImportStep;
+import com.example.polyglotast.utils.ImportData;
 
 public class PolyglotDUBuilder implements PolyglotTreeProcessor {
 
-    //A value can be exported only once, but imported several times.
-    private HashMap<String, LinkedList<Pair<Integer, Integer>>> imports;
-    private HashMap<String, Pair<Integer, Integer>> exports;
-    //Keeping track of nodes so we can identify cycles
-    private List<String> visited;
+    private HashMap<String, ArrayList<ImportData>> imports;
+    private HashMap<String, ArrayList<ExportData>> exports;
+    private HashSet<Path> listPathsVisited;
+    private ArrayList<ExportImportStep> listOperation;
+
+
+    private HashMap<String, HashSet<ImportData>> importWithoutExport;
+    private HashMap<String, HashSet<ImportData>> importBeforeExport;
+    private HashMap<String, HashSet<ImportData>> importFromSameFile;
+    private HashMap<String, HashSet<ExportData>> exportWithoutImport;
 
     public PolyglotDUBuilder() {
         this.imports = new HashMap<>();
         this.exports = new HashMap<>();
-        this.visited = new LinkedList<String>();
+        this.listPathsVisited = new HashSet<>();
+        this.listOperation = new ArrayList<>();
     }
 
     protected PolyglotDUBuilder(PolyglotDUBuilder parent) {
         this.imports = parent.imports;
         this.exports = parent.exports;
+        this.listPathsVisited = parent.listPathsVisited;
+        this.listOperation = parent.listOperation;
     }
 
     protected void updateMaps(PolyglotDUBuilder son) {
         this.imports.putAll(son.imports);
         this.exports.putAll(son.exports);
+        this.listPathsVisited.addAll(son.listPathsVisited);
+        this.listOperation.addAll(son.listOperation);
     }
 
-    public HashMap<String, Pair<Integer, Integer>> getExports() {
-        return this.exports;
+    public ArrayList<ExportImportStep> getListOperation(){
+        return this.listOperation;
     }
 
-    public HashMap<String, LinkedList<Pair<Integer, Integer>>> getImports() {
+    public HashSet<Path> getPathsCovered(){
+        return this.listPathsVisited;
+    }
+
+    public HashMap<String, ArrayList<ImportData>> getImports(){
         return this.imports;
+    }
+
+    public HashMap<String, ArrayList<ExportData>> getExports(){
+        return this.exports;
     }
 
     @Override
     public void process(PolyglotZipper zipper) {
-        if (zipper.isImport()) {
-            String name = getVariableNameFromZipper(zipper);
-            if (!this.imports.containsKey(name)) {
-                this.imports.put(name, new LinkedList<>());
+        if(zipper.isImport()){
+            ImportData imp = new ImportData(zipper);
+            if(!imp.getVar_name().equals("")){
+                // Add path to a list, usefull to refresh diagnostics of the specific file
+                listPathsVisited.add(imp.getFilePath());
+                // Check Probable Error/Warning
+
+                // Add to the map of imports
+                if(imports.containsKey(imp.getVar_name())){
+                    imports.get(imp.getVar_name()).add(imp);
+                } else {
+                    ArrayList<ImportData> list = new ArrayList<>();
+                    list.add(imp);
+                    imports.put(imp.getVar_name(), list);
+                }
             }
-            this.imports.get(name).add(zipper.getPosition());
-        }
-        if (zipper.isExport()) {
-            this.exports.put(getVariableNameFromZipper(zipper), zipper.getPosition());
+        } else if(zipper.isExport()){
+            ExportData exp = new ExportData(zipper);
+            if(!exp.getVar_name().equals("")){
+                // Add path to a list, usefull to refresh diagnostics of the specific file
+                listPathsVisited.add(exp.getFilePath());
+                // Check Probable Error/Warning
+
+                // Add to the map of exports
+                if(exports.containsKey(exp.getVar_name())){
+                    exports.get(exp.getVar_name()).add(exp);
+                } else {
+                    ArrayList<ExportData> list = new ArrayList<>();
+                    list.add(exp);
+                    exports.put(exp.getVar_name(), list);
+                }
+            }
         }
 
         PolyglotZipper next = zipper.down();
@@ -60,53 +99,5 @@ public class PolyglotDUBuilder implements PolyglotTreeProcessor {
             next = next.right();
         }
     }
-
-    public String getVariableNameFromZipper(PolyglotZipper zipper){
-        String regex = "name=('|\")(.*)('|\")";
-        Pattern p = Pattern.compile(regex);
-        Matcher m = p.matcher(zipper.getBindingName());
-        if (m.find()) {
-            return m.group(2);
-        }
-        return zipper.getBindingName().replaceAll("\'", "").replaceAll("\"", "");
-    }
-
-    public HashMap<String, Pair<Integer, Integer>> getExportInconsistencies(){
-        Set<String> exports = this.exports.keySet();
-        Set<String> imports = this.imports.keySet();
-        HashMap<String, Pair<Integer, Integer>> result = new HashMap<String, Pair<Integer, Integer>>();
-
-        for(String exp : exports) {
-            if(!imports.contains(exp)) {
-                result.put(exp, this.exports.get(exp));
-            }
-        }
-        return result;
-    }
-
-    public HashMap<String, LinkedList<Pair<Integer, Integer>>> getImportInconsistencies(){
-        Set<String> exports = this.exports.keySet();
-        Set<String> imports = this.imports.keySet();
-        HashMap<String, LinkedList<Pair<Integer, Integer>>> map = new HashMap<String, LinkedList<Pair<Integer, Integer>>>();
-
-        for(String imp : imports) {
-            if(!exports.contains(imp)) {
-                if(map.containsKey(imp)){
-                    map.get(imp).addAll(this.imports.get(imp));
-                } else {
-                    map.put(imp, this.imports.get(imp));
-                }
-            }
-        }
-        return map;
-    }
-
-    public void printInconsistencies() {
-        HashMap<String, LinkedList<Pair<Integer, Integer>>> importInconsistencies = getImportInconsistencies();
-        for(String imp : importInconsistencies.keySet()){
-            System.out.println("imported but not exported: " + imp);
-        }
-
-
-    }
 }
+

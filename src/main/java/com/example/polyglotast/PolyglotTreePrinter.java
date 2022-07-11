@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,7 +43,7 @@ public class PolyglotTreePrinter implements PolyglotTreeProcessor {
             Matcher matcher = pattern_regex.matcher(obj);
             if(matcher.find()){
                 if(!matcher.group(1).contains("\"")){
-                    puml += "object \""+ matcher.group(1)+"\" as "+id+"\n";
+                    puml += "object \""+ matcher.group(1)+"\" as "+id+" #fff\n";
                 } else {
                     puml += "object \""+ matcher.group(1).replace('"', '\'')+"\" as "+id+"\n";
                 }
@@ -91,6 +92,13 @@ public class PolyglotTreePrinter implements PolyglotTreeProcessor {
 
     @Override
     public void process(PolyglotZipper zipper) {
+        this.process(zipper, new HashSet<PolyglotTreeHandler>());
+    }
+
+    public void process(PolyglotZipper zipper, HashSet<PolyglotTreeHandler> alreadyVisited){
+        if(!alreadyVisited.contains(zipper.getCurrentTree())){
+            alreadyVisited.add(zipper.getCurrentTree());
+        }
         this.result = "";
         if (zipper.down().isNull()) {
             this.result += this.indent + zipper.getType() + " : " + zipper.getCode() + "(" + zipper.getPosition() + ")\n";
@@ -99,9 +107,9 @@ public class PolyglotTreePrinter implements PolyglotTreeProcessor {
             this.result += this.indent + zipper.getType() + "\n";
         }
         PolyglotZipper next = zipper.down();
-        while (!next.isNull()) {
+        while (!next.isNull() && !(next.getCurrentTree() != zipper.getCurrentTree() && alreadyVisited.contains(next.getCurrentTree()))) {
             PolyglotTreePrinter nextp = new PolyglotTreePrinter("|  " + this.indent);
-            nextp.process(next);
+            nextp.process(next, alreadyVisited);
             this.result += nextp.getRes();
             next = next.right();
         }
