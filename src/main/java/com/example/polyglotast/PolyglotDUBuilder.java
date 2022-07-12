@@ -12,7 +12,6 @@ public class PolyglotDUBuilder implements PolyglotTreeProcessor {
     private HashMap<String, ArrayList<ImportData>> imports;
     private HashMap<String, ArrayList<ExportData>> exports;
     private HashSet<Path> listPathsVisited;
-    private ArrayList<ExportImportStep> listOperation;
 
 
     private HashMap<String, HashSet<ImportData>> importWithoutExport;
@@ -24,25 +23,49 @@ public class PolyglotDUBuilder implements PolyglotTreeProcessor {
         this.imports = new HashMap<>();
         this.exports = new HashMap<>();
         this.listPathsVisited = new HashSet<>();
-        this.listOperation = new ArrayList<>();
+
+        this.importBeforeExport = new HashMap<>();
+        this.importWithoutExport = new HashMap<>();
+        this.importFromSameFile = new HashMap<>();
+        this.exportWithoutImport = new HashMap<>();
     }
 
     protected PolyglotDUBuilder(PolyglotDUBuilder parent) {
         this.imports = parent.imports;
         this.exports = parent.exports;
         this.listPathsVisited = parent.listPathsVisited;
-        this.listOperation = parent.listOperation;
+
+        this.importBeforeExport = parent.importBeforeExport;
+        this.importWithoutExport = parent.importWithoutExport;
+        this.importFromSameFile = parent.importFromSameFile;
+        this.exportWithoutImport = parent.exportWithoutImport;
     }
 
-    protected void updateMaps(PolyglotDUBuilder son) {
+    public void updateMaps(PolyglotDUBuilder son) {
         this.imports.putAll(son.imports);
         this.exports.putAll(son.exports);
         this.listPathsVisited.addAll(son.listPathsVisited);
-        this.listOperation.addAll(son.listOperation);
+
+        this.importBeforeExport.putAll(son.importBeforeExport);
+        this.importWithoutExport.putAll(son.importWithoutExport);
+        this.importFromSameFile.putAll(son.importFromSameFile);
+        this.exportWithoutImport.putAll(son.exportWithoutImport);
     }
 
-    public ArrayList<ExportImportStep> getListOperation(){
-        return this.listOperation;
+    public HashMap<String, HashSet<ImportData>> getImportWithoutExport() {
+        return importWithoutExport;
+    }
+
+    public HashMap<String, HashSet<ImportData>> getImportBeforeExport() {
+        return importBeforeExport;
+    }
+
+    public HashMap<String, HashSet<ImportData>> getImportFromSameFile() {
+        return importFromSameFile;
+    }
+
+    public HashMap<String, HashSet<ExportData>> getExportWithoutImport() {
+        return exportWithoutImport;
     }
 
     public HashSet<Path> getPathsCovered(){
@@ -59,13 +82,12 @@ public class PolyglotDUBuilder implements PolyglotTreeProcessor {
 
     @Override
     public void process(PolyglotZipper zipper) {
+        if(PolyglotTreeHandler.getfilePathOfTreeHandler().containsKey(zipper.getCurrentTree())) listPathsVisited.add(PolyglotTreeHandler.getfilePathOfTreeHandler().get(zipper.getCurrentTree()));
         if(zipper.isImport()){
             ImportData imp = new ImportData(zipper);
             if(!imp.getVar_name().equals("")){
-                // Add path to a list, usefull to refresh diagnostics of the specific file
-                listPathsVisited.add(imp.getFilePath());
                 // Check Probable Error/Warning
-
+                this.computePotentialImportErrors(imp);
                 // Add to the map of imports
                 if(imports.containsKey(imp.getVar_name())){
                     imports.get(imp.getVar_name()).add(imp);
@@ -78,10 +100,8 @@ public class PolyglotDUBuilder implements PolyglotTreeProcessor {
         } else if(zipper.isExport()){
             ExportData exp = new ExportData(zipper);
             if(!exp.getVar_name().equals("")){
-                // Add path to a list, usefull to refresh diagnostics of the specific file
-                listPathsVisited.add(exp.getFilePath());
                 // Check Probable Error/Warning
-
+                this.computePotentialExportErrors(exp);
                 // Add to the map of exports
                 if(exports.containsKey(exp.getVar_name())){
                     exports.get(exp.getVar_name()).add(exp);
@@ -94,9 +114,59 @@ public class PolyglotDUBuilder implements PolyglotTreeProcessor {
         }
 
         PolyglotZipper next = zipper.down();
-        while (!next.isNull()) {
+        Path nextPath = null;
+        if(PolyglotTreeHandler.getfilePathOfTreeHandler().containsKey(next.getCurrentTree())) nextPath = PolyglotTreeHandler.getfilePathOfTreeHandler().get(next.getCurrentTree());
+        while (!next.isNull() && !(zipper.getCurrentTree() != next.getCurrentTree() && nextPath != null && listPathsVisited.contains(nextPath))) {
             this.process(next);
             next = next.right();
+        }
+    }
+
+    private void computePotentialExportErrors(ExportData exp){
+        if(this.importWithoutExport.containsKey(exp.getVar_name())){
+            if(this.importBeforeExport.containsKey(exp.getVar_name())){
+                this.importBeforeExport.get(exp.getVar_name()).addAll(this.importWithoutExport.get(exp.getVar_name()));
+            } else {
+                HashSet<ImportData> list = new HashSet<>();
+                list.addAll(this.importWithoutExport.get(exp.getVar_name()));
+                this.importBeforeExport.put(exp.getVar_name(), list);
+            }
+            this.importWithoutExport.remove(exp.getVar_name());
+        } else if(!this.imports.containsKey(exp.getVar_name())) {
+            if(this.exportWithoutImport.containsKey(exp.getVar_name())){
+                this.exportWithoutImport.get(exp.getVar_name()).add(exp);
+            } else {
+                HashSet<ExportData> list = new HashSet<>();
+                list.add(exp);
+                this.exportWithoutImport.put(exp.getVar_name(), list);
+            }
+        }
+    }
+
+    private void computePotentialImportErrors(ImportData imp){
+        // Check if the variable was exported
+        if(this.exports.containsKey(imp.getVar_name()) && this.exports.get(imp.getVar_name()).size()>0) {
+            // Remove variable from the "export without import" list
+            if(this.exportWithoutImport.containsKey(imp.getVar_name())) this.exportWithoutImport.remove(imp.getVar_name());
+            // Check if last export of variable was in the same file
+            if(this.exports.get(imp.getVar_name()).get(this.exports.get(imp.getVar_name()).size()-1).getFilePath().equals(imp.getFilePath())){
+                if(this.importFromSameFile.containsKey(imp.getVar_name())){
+                    this.importFromSameFile.get(imp.getVar_name()).add(imp);
+                } else {
+                    HashSet<ImportData> list = new HashSet();
+                    list.add(imp);
+                    this.importFromSameFile.put(imp.getVar_name(), list);
+                }
+            }
+        } else {
+            // Add to list of import without export
+            if(this.importWithoutExport.containsKey(imp.getVar_name())){
+                this.importWithoutExport.get(imp.getVar_name()).add(imp);
+            } else {
+                HashSet<ImportData> list = new HashSet();
+                list.add(imp);
+                this.importWithoutExport.put(imp.getVar_name(), list);
+            }
         }
     }
 }

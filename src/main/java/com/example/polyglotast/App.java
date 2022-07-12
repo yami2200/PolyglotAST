@@ -15,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -134,9 +135,9 @@ public class App {
         System.out.println(" TREE BASIC WITH 3 FILES");*/
 
         PolyglotTreePrinter p = new PolyglotTreePrinter();
-        PolyglotTreeHandler tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/test1_host.py")), "python");
+        PolyglotTreeHandler tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/example4_Cyclic_ImportExportTest/Part2.js")), "javascript");
         tree.apply(p);
-        p.printUMLInFile("basic_tree.puml");
+        p.printUMLInFile("cycle_importexport.puml");
         PolyglotDUBuilder du = new PolyglotDUBuilder();
         tree.apply(du);
     }

@@ -13,6 +13,7 @@ public class ExportData {
     private int line_pos_end;
     private String var_name;
     private Path filePath;
+    private String id;
 
     public Path getFilePath() {
         return filePath;
@@ -38,6 +39,10 @@ public class ExportData {
         return var_name;
     }
 
+    public String getId() {
+        return id;
+    }
+
     public ExportData(PolyglotZipper zipper) {
         this.var_name = "";
         switch (zipper.getLang()) {
@@ -59,6 +64,7 @@ public class ExportData {
         this.char_pos_end = zipper.down().right().down().right().right().right().right().getPosition().component2() + 1;
         this.line_pos_end = zipper.down().right().down().right().right().right().right().getPosition().component1();
         this.filePath = PolyglotTreeHandler.getfilePathOfTreeHandler().get(zipper.getCurrentTree());
+        this.id = filePath.toString() + this.char_pos + this.line_pos + this.var_name;
     }
 
 }
