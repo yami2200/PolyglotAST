@@ -150,7 +150,6 @@ public class PolyglotTreeHandler {
         }
     }
 
-
     /**
      * Recursively builds a polyglot tree by traversing the given subtree
      * 
@@ -495,8 +494,9 @@ public class PolyglotTreeHandler {
         return this.cursor;
     }
 
-    public Zipper<?> getCurrentCursor() { // TODO : return a special "polyglot node" if the cursor is an eval, import or
-                                          // export function call (mark it or new inherited class ?)
+    // TODO : return a special "polyglot node" if the cursor is an eval, import or
+    public Zipper<?> getCurrentCursor() {
+        // export function call (mark it or new inherited class ?)
         if (this.insideSubtree) {
             return this.getCurrentSubtree().getCurrentCursor();
         }

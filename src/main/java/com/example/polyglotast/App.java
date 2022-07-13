@@ -70,11 +70,13 @@ public class App {
 
 
         //PolyglotTreeHandler tree = new PolyglotTreeHandler(code2, "python");
-        PolyglotTreeHandler tree = new PolyglotTreeHandler(Paths.get("GraalSamples/arraysort.js"), "javascript");
-        //PolyglotTreeHandler tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/test_cycle.py")), "python");
+        PolyglotTreeHandler tree = new PolyglotTreeHandler(Paths.get("GraalSamples/functionusage.js"), "javascript");
+        //PolyglotTreeHandler tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/test_singlefile.js")), "javascript");
+        PolyglotDUBuilder builder = new PolyglotDUBuilder();
+        tree.apply(builder);
         PolyglotTreeVisualizer visualizer = new PolyglotTreeVisualizer();
         tree.apply(visualizer);
-        visualizer.save("arraysort.puml");
+        visualizer.save("functionusage.puml");
         //PolyglotTreeHandler tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/test1_host.py")), "python");
         /*PolyglotTreePrinter p = new PolyglotTreePrinter();
         tree.apply(p);*/

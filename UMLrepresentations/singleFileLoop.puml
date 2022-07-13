@@ -1,0 +1,15 @@
+@startuml
+object "Polyglot AST" as 0 #666
+0 : Host : test_singlefile.js
+object "program" as 1 #f584db
+0 -down-> 1
+object "comment" as 2 #f584db
+2 : // test
+2 : ((0, 0))
+1 -down-> 2
+object "expression_statement" as 4 #f584db
+1 -down-> 4
+object "polyglot_eval_call" as 5 #777
+5 : EvalFile : test_singlefile.js
+4 -down-> 5
+@enduml

@@ -1,254 +1,255 @@
 @startuml
 object "Polyglot AST" as 0 #666
-object "program" as 1 #f584db
+0 : Host : functionusage.js
+object "program" as 1 #f1f299
 0 -down-> 1
-object "expression_statement" as 2 #f584db
+object "expression_statement" as 2 #f1f299
 1 -down-> 2
 object "polyglot_eval_call" as 3 #777
 3 : EvalFile : functiondef.py
 2 -down-> 3
-object "module" as 4 #a77df0
+object "module" as 4 #f584db
 3 -down-> 4
-object "import_statement" as 5 #a77df0
+object "import_statement" as 5 #f584db
 4 -down-> 5
-object "import" as 6 #a77df0
+object "import" as 6 #f584db
 6 : ((0, 0))
 5 -down-> 6
-object "dotted_name" as 8 #a77df0
+object "dotted_name" as 8 #f584db
 5 -down-> 8
-object "identifier" as 9 #a77df0
+object "identifier" as 9 #f584db
 9 : polyglot
 9 : ((0, 7))
 8 -down-> 9
-object "function_definition" as 13 #a77df0
+object "function_definition" as 13 #f584db
 4 -down-> 13
-object "def" as 14 #a77df0
+object "def" as 14 #f584db
 14 : ((2, 0))
 13 -down-> 14
-object "identifier" as 16 #a77df0
+object "identifier" as 16 #f584db
 16 : foo
 16 : ((2, 4))
 13 -down-> 16
-object "parameters" as 18 #a77df0
+object "parameters" as 18 #f584db
 13 -down-> 18
-object "(" as 19 #a77df0
+object "(" as 19 #f584db
 19 : ((2, 7))
 18 -down-> 19
-object "identifier" as 21 #a77df0
+object "identifier" as 21 #f584db
 21 : ((2, 8))
 18 -down-> 21
-object "," as 23 #a77df0
+object "," as 23 #f584db
 23 : ((2, 9))
 18 -down-> 23
-object "identifier" as 25 #a77df0
+object "identifier" as 25 #f584db
 25 : ((2, 11))
 18 -down-> 25
-object ")" as 27 #a77df0
+object ")" as 27 #f584db
 27 : ((2, 12))
 18 -down-> 27
-object ":" as 30 #a77df0
+object ":" as 30 #f584db
 30 : ((2, 13))
 13 -down-> 30
-object "block" as 32 #a77df0
+object "block" as 32 #f584db
 13 -down-> 32
-object "return_statement" as 33 #a77df0
+object "return_statement" as 33 #f584db
 32 -down-> 33
-object "return" as 34 #a77df0
+object "return" as 34 #f584db
 34 : ((3, 4))
 33 -down-> 34
-object "binary_operator" as 36 #a77df0
+object "binary_operator" as 36 #f584db
 33 -down-> 36
-object "binary_operator" as 37 #a77df0
+object "binary_operator" as 37 #f584db
 36 -down-> 37
-object "identifier" as 38 #a77df0
+object "identifier" as 38 #f584db
 38 : ((3, 11))
 37 -down-> 38
-object "**" as 40 #a77df0
+object "**" as 40 #f584db
 40 : ((3, 12))
 37 -down-> 40
-object "integer" as 42 #a77df0
+object "integer" as 42 #f584db
 42 : ((3, 14))
 37 -down-> 42
-object "+" as 45 #a77df0
+object "+" as 45 #f584db
 45 : ((3, 16))
 36 -down-> 45
-object "binary_operator" as 47 #a77df0
+object "binary_operator" as 47 #f584db
 36 -down-> 47
-object "identifier" as 48 #a77df0
+object "identifier" as 48 #f584db
 48 : ((3, 18))
 47 -down-> 48
-object "**" as 50 #a77df0
+object "**" as 50 #f584db
 50 : ((3, 19))
 47 -down-> 50
-object "integer" as 52 #a77df0
+object "integer" as 52 #f584db
 52 : ((3, 21))
 47 -down-> 52
-object "expression_statement" as 59 #a77df0
+object "expression_statement" as 59 #f584db
 4 -down-> 59
-object "polyglot_export_call" as 60 #6c26de
+object "polyglot_export_call" as 60 #e329b8
 60 : Export : foo
 59 -down-> 60
-object "attribute" as 61 #a77df0
+object "attribute" as 61 #f584db
 60 -down-> 61
-object "identifier" as 62 #a77df0
+object "identifier" as 62 #f584db
 62 : polyglot
 62 : ((6, 0))
 61 -down-> 62
-object "." as 64 #a77df0
+object "." as 64 #f584db
 64 : ((6, 8))
 61 -down-> 64
-object "identifier" as 66 #a77df0
+object "identifier" as 66 #f584db
 66 : export_value
 66 : ((6, 9))
 61 -down-> 66
-object "argument_list" as 69 #a77df0
+object "argument_list" as 69 #f584db
 60 -down-> 69
-object "(" as 70 #a77df0
+object "(" as 70 #f584db
 70 : ((6, 21))
 69 -down-> 70
-object "keyword_argument" as 72 #a77df0
+object "keyword_argument" as 72 #f584db
 69 -down-> 72
-object "identifier" as 73 #a77df0
+object "identifier" as 73 #f584db
 73 : value
 73 : ((6, 22))
 72 -down-> 73
-object "=" as 75 #a77df0
+object "=" as 75 #f584db
 75 : ((6, 27))
 72 -down-> 75
-object "identifier" as 77 #a77df0
+object "identifier" as 77 #f584db
 77 : foo
 77 : ((6, 28))
 72 -down-> 77
-object "," as 80 #a77df0
+object "," as 80 #f584db
 80 : ((6, 31))
 69 -down-> 80
-object "keyword_argument" as 82 #a77df0
+object "keyword_argument" as 82 #f584db
 69 -down-> 82
-object "identifier" as 83 #a77df0
+object "identifier" as 83 #f584db
 83 : name
 83 : ((6, 33))
 82 -down-> 83
-object "=" as 85 #a77df0
+object "=" as 85 #f584db
 85 : ((6, 37))
 82 -down-> 85
-object "string" as 87 #a77df0
+object "string" as 87 #f584db
 87 : 'foo'
 82 -down-> 87
-object "'" as 88 #a77df0
+object "'" as 88 #f584db
 88 : ((6, 38))
 87 -down-> 88
-object "'" as 90 #a77df0
+object "'" as 90 #f584db
 90 : ((6, 42))
 87 -down-> 90
-object ")" as 94 #a77df0
+object ")" as 94 #f584db
 94 : ((6, 43))
 69 -down-> 94
-object ";" as 101 #f584db
+object ";" as 101 #f1f299
 101 : ((0, 45))
 2 -down-> 101
-object "variable_declaration" as 104 #f584db
+object "variable_declaration" as 104 #f1f299
 1 -down-> 104
-object "var" as 105 #f584db
+object "var" as 105 #f1f299
 105 : ((2, 0))
 104 -down-> 105
-object "variable_declarator" as 107 #f584db
+object "variable_declarator" as 107 #f1f299
 104 -down-> 107
-object "identifier" as 108 #f584db
+object "identifier" as 108 #f1f299
 108 : foo
 108 : ((2, 4))
 107 -down-> 108
-object "=" as 110 #f584db
+object "=" as 110 #f1f299
 110 : ((2, 8))
 107 -down-> 110
-object "polyglot_import_call" as 112 #e329b8
+object "polyglot_import_call" as 112 #ffff1c
 112 : Import : foo
 107 -down-> 112
-object "member_expression" as 113 #f584db
+object "member_expression" as 113 #f1f299
 112 -down-> 113
-object "identifier" as 114 #f584db
+object "identifier" as 114 #f1f299
 114 : Polyglot
 114 : ((2, 10))
 113 -down-> 114
-object "." as 116 #f584db
+object "." as 116 #f1f299
 116 : ((2, 18))
 113 -down-> 116
-object "property_identifier" as 118 #f584db
+object "property_identifier" as 118 #f1f299
 118 : import
 118 : ((2, 19))
 113 -down-> 118
-object "arguments" as 121 #f584db
+object "arguments" as 121 #f1f299
 112 -down-> 121
-object "(" as 122 #f584db
+object "(" as 122 #f1f299
 122 : ((2, 25))
 121 -down-> 122
-object "string" as 124 #f584db
+object "string" as 124 #f1f299
 124 : 'foo'
 121 -down-> 124
-object "'" as 125 #f584db
+object "'" as 125 #f1f299
 125 : ((2, 26))
 124 -down-> 125
-object "string_fragment" as 127 #f584db
+object "string_fragment" as 127 #f1f299
 127 : foo
 127 : ((2, 27))
 124 -down-> 127
-object "'" as 129 #f584db
+object "'" as 129 #f1f299
 129 : ((2, 30))
 124 -down-> 129
-object ")" as 132 #f584db
+object ")" as 132 #f1f299
 132 : ((2, 31))
 121 -down-> 132
-object ";" as 137 #f584db
+object ";" as 137 #f1f299
 137 : ((2, 32))
 104 -down-> 137
-object "expression_statement" as 140 #f584db
+object "expression_statement" as 140 #f1f299
 1 -down-> 140
-object "call_expression" as 141 #f584db
+object "call_expression" as 141 #f1f299
 140 -down-> 141
-object "member_expression" as 142 #f584db
+object "member_expression" as 142 #f1f299
 141 -down-> 142
-object "identifier" as 143 #f584db
+object "identifier" as 143 #f1f299
 143 : console
 143 : ((5, 0))
 142 -down-> 143
-object "." as 145 #f584db
+object "." as 145 #f1f299
 145 : ((5, 7))
 142 -down-> 145
-object "property_identifier" as 147 #f584db
+object "property_identifier" as 147 #f1f299
 147 : log
 147 : ((5, 8))
 142 -down-> 147
-object "arguments" as 150 #f584db
+object "arguments" as 150 #f1f299
 141 -down-> 150
-object "(" as 151 #f584db
+object "(" as 151 #f1f299
 151 : ((5, 11))
 150 -down-> 151
-object "call_expression" as 153 #f584db
+object "call_expression" as 153 #f1f299
 150 -down-> 153
-object "identifier" as 154 #f584db
+object "identifier" as 154 #f1f299
 154 : foo
 154 : ((5, 12))
 153 -down-> 154
-object "arguments" as 156 #f584db
+object "arguments" as 156 #f1f299
 153 -down-> 156
-object "(" as 157 #f584db
+object "(" as 157 #f1f299
 157 : ((5, 15))
 156 -down-> 157
-object "number" as 159 #f584db
+object "number" as 159 #f1f299
 159 : ((5, 16))
 156 -down-> 159
-object "," as 161 #f584db
+object "," as 161 #f1f299
 161 : ((5, 17))
 156 -down-> 161
-object "number" as 163 #f584db
+object "number" as 163 #f1f299
 163 : ((5, 19))
 156 -down-> 163
-object ")" as 165 #f584db
+object ")" as 165 #f1f299
 165 : ((5, 20))
 156 -down-> 165
-object ")" as 169 #f584db
+object ")" as 169 #f1f299
 169 : ((5, 21))
 150 -down-> 169
-object ";" as 173 #f584db
+object ";" as 173 #f1f299
 173 : ((5, 22))
 140 -down-> 173
 @enduml

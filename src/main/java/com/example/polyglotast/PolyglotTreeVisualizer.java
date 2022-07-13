@@ -72,6 +72,9 @@ public class PolyglotTreeVisualizer implements PolyglotTreeProcessor {
     public void process(PolyglotZipper zipper) {
         this.currentID = 0;
         this.UMLResult = "@startuml\n"+"object \"Polyglot AST\" as "+this.currentID+" #666\n";
+        if(PolyglotTreeHandler.getfilePathOfTreeHandler().containsKey(zipper.getCurrentTree())){
+            this.UMLResult += this.currentID + " : Host : "+ PolyglotTreeHandler.getfilePathOfTreeHandler().get(zipper.getCurrentTree()).getFileName().toString()+"\n";
+        }
         this.process(zipper, new HashSet<PolyglotTreeHandler>(), this.currentID, this.currentID, (String) colorSet.toArray()[new Random().nextInt(colorSet.size())]);
         this.UMLResult += "@enduml";
     }
@@ -87,6 +90,7 @@ public class PolyglotTreeVisualizer implements PolyglotTreeProcessor {
         }
         this.UMLResult += parentID + " -down-> "+this.currentID+"\n";
 
+        if(zipper.isEval() && ((zipper.down().getType().equals("program") || zipper.down().getType().equals("module")) && zipper.getCurrentTree().equals(zipper.down().getCurrentTree()))) return;
         PolyglotZipper next = zipper.down();
         while (!next.isNull() && !(next.getCurrentTree() != zipper.getCurrentTree() && alreadyVisited.contains(next.getCurrentTree()))) {
             PolyglotTreeVisualizer visualizer = new PolyglotTreeVisualizer();
@@ -120,7 +124,7 @@ public class PolyglotTreeVisualizer implements PolyglotTreeProcessor {
         if(zipper.isEval()){
             if(!PolyglotTreeHandler.getfilePathOfTreeHandler().containsKey(zipper.down().currentTree)) return "";
             String filename = PolyglotTreeHandler.getfilePathOfTreeHandler().get(zipper.down().currentTree).getFileName().toString();
-            if(PolyglotTreeHandler.getfilePathOfTreeHandler().containsKey(zipper.currentTree) && PolyglotTreeHandler.getfilePathOfTreeHandler().get(zipper.currentTree).getFileName().toString().equals(filename)) {
+            if(zipper.down().isNull() || !((zipper.down().getType().equals("program") || zipper.down().getType().equals("module")))) {
                 return zipperID+ " : EvalFile Error : file not found\n";
             }
             return zipperID+ " : EvalFile : "+filename+"\n";

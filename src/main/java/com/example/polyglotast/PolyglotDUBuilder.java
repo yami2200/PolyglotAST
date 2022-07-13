@@ -2,7 +2,9 @@ package com.example.polyglotast;
 
 import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Stream;
 
+import com.example.polyglotast.utils.CodeArea;
 import com.example.polyglotast.utils.ExportData;
 import com.example.polyglotast.utils.ExportImportStep;
 import com.example.polyglotast.utils.ImportData;
@@ -18,6 +20,7 @@ public class PolyglotDUBuilder implements PolyglotTreeProcessor {
     private HashMap<String, HashSet<ImportData>> importBeforeExport;
     private HashMap<String, HashSet<ImportData>> importFromSameFile;
     private HashMap<String, HashSet<ExportData>> exportWithoutImport;
+    private HashSet<CodeArea> evalSameFile;
 
     public PolyglotDUBuilder() {
         this.imports = new HashMap<>();
@@ -28,6 +31,7 @@ public class PolyglotDUBuilder implements PolyglotTreeProcessor {
         this.importWithoutExport = new HashMap<>();
         this.importFromSameFile = new HashMap<>();
         this.exportWithoutImport = new HashMap<>();
+        this.evalSameFile = new HashSet<>();
     }
 
     protected PolyglotDUBuilder(PolyglotDUBuilder parent) {
@@ -39,6 +43,7 @@ public class PolyglotDUBuilder implements PolyglotTreeProcessor {
         this.importWithoutExport = parent.importWithoutExport;
         this.importFromSameFile = parent.importFromSameFile;
         this.exportWithoutImport = parent.exportWithoutImport;
+        this.evalSameFile = parent.evalSameFile;
     }
 
     public void updateMaps(PolyglotDUBuilder son) {
@@ -50,6 +55,11 @@ public class PolyglotDUBuilder implements PolyglotTreeProcessor {
         this.importWithoutExport.putAll(son.importWithoutExport);
         this.importFromSameFile.putAll(son.importFromSameFile);
         this.exportWithoutImport.putAll(son.exportWithoutImport);
+        this.evalSameFile.addAll(son.evalSameFile);
+    }
+
+    public HashSet<CodeArea> getEvalSameFile() {
+        return evalSameFile;
     }
 
     public HashMap<String, HashSet<ImportData>> getImportWithoutExport() {
@@ -82,6 +92,7 @@ public class PolyglotDUBuilder implements PolyglotTreeProcessor {
 
     @Override
     public void process(PolyglotZipper zipper) {
+        boolean loopInSingleFile = false;
         if(PolyglotTreeHandler.getfilePathOfTreeHandler().containsKey(zipper.getCurrentTree())) listPathsVisited.add(PolyglotTreeHandler.getfilePathOfTreeHandler().get(zipper.getCurrentTree()));
         if(zipper.isImport()){
             ImportData imp = new ImportData(zipper);
@@ -111,12 +122,24 @@ public class PolyglotDUBuilder implements PolyglotTreeProcessor {
                     exports.put(exp.getVar_name(), list);
                 }
             }
+        } else if(zipper.isEval() && PolyglotTreeHandler.getfilePathOfTreeHandler().containsKey(zipper.getCurrentTree())){
+            if(zipper.down().isNull() || ((zipper.down().getType().equals("program") || zipper.down().getType().equals("module")) && zipper.getCurrentTree().equals(zipper.down().getCurrentTree()))){
+                loopInSingleFile = true;
+                String[] lines = zipper.getCurrentTree().nodeToCode(zipper.node).split("\r\n|\r|\n");
+                int nbLines = lines.length;
+                CodeArea line = new CodeArea(zipper.getPosition().component2(),
+                        zipper.getPosition().component1(),
+                        zipper.getPosition().component2()+(lines[nbLines-1]).length(),
+                        zipper.getPosition().component1()+nbLines-1,
+                        PolyglotTreeHandler.getfilePathOfTreeHandler().get(zipper.getCurrentTree()));
+                this.evalSameFile.add(line);
+            }
         }
 
         PolyglotZipper next = zipper.down();
         Path nextPath = null;
         if(PolyglotTreeHandler.getfilePathOfTreeHandler().containsKey(next.getCurrentTree())) nextPath = PolyglotTreeHandler.getfilePathOfTreeHandler().get(next.getCurrentTree());
-        while (!next.isNull() && !(zipper.getCurrentTree() != next.getCurrentTree() && nextPath != null && listPathsVisited.contains(nextPath))) {
+        while (!loopInSingleFile && !next.isNull() && !(zipper.getCurrentTree() != next.getCurrentTree() && nextPath != null && listPathsVisited.contains(nextPath))) {
             this.process(next);
             next = next.right();
         }
