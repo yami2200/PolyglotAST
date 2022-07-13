@@ -1,0 +1,741 @@
+@startuml
+object "Polyglot AST" as 0 #666
+object "module" as 1 #f1f299
+0 -down-> 1
+object "import_statement" as 2 #f1f299
+1 -down-> 2
+object "import" as 3 #f1f299
+3 : ((0, 0))
+2 -down-> 3
+object "dotted_name" as 5 #f1f299
+2 -down-> 5
+object "identifier" as 6 #f1f299
+6 : polyglot
+6 : ((0, 7))
+5 -down-> 6
+object "expression_statement" as 10 #f1f299
+1 -down-> 10
+object "polyglot_eval_call" as 11 #777
+11 : EvalFile Error : file not found
+10 -down-> 11
+object "attribute" as 12 #f1f299
+11 -down-> 12
+object "identifier" as 13 #f1f299
+13 : polyglot
+13 : ((1, 0))
+12 -down-> 13
+object "." as 15 #f1f299
+15 : ((1, 8))
+12 -down-> 15
+object "identifier" as 17 #f1f299
+17 : eval
+17 : ((1, 9))
+12 -down-> 17
+object "argument_list" as 20 #f1f299
+11 -down-> 20
+object "(" as 21 #f1f299
+21 : ((1, 13))
+20 -down-> 21
+object "keyword_argument" as 23 #f1f299
+20 -down-> 23
+object "identifier" as 24 #f1f299
+24 : language
+24 : ((1, 14))
+23 -down-> 24
+object "=" as 26 #f1f299
+26 : ((1, 22))
+23 -down-> 26
+object "string" as 28 #f1f299
+28 : 'python'
+23 -down-> 28
+object "'" as 29 #f1f299
+29 : ((1, 23))
+28 -down-> 29
+object "'" as 31 #f1f299
+31 : ((1, 30))
+28 -down-> 31
+object "," as 35 #f1f299
+35 : ((1, 31))
+20 -down-> 35
+object "keyword_argument" as 37 #f1f299
+20 -down-> 37
+object "identifier" as 38 #f1f299
+38 : path
+38 : ((1, 33))
+37 -down-> 38
+object "=" as 40 #f1f299
+40 : ((1, 37))
+37 -down-> 40
+object "string" as 42 #f1f299
+42 : 'testaze.py'
+37 -down-> 42
+object "'" as 43 #f1f299
+43 : ((1, 38))
+42 -down-> 43
+object "'" as 45 #f1f299
+45 : ((1, 49))
+42 -down-> 45
+object ")" as 49 #f1f299
+49 : ((1, 50))
+20 -down-> 49
+object "expression_statement" as 54 #f1f299
+1 -down-> 54
+object "polyglot_eval_call" as 55 #777
+55 : EvalFile : test1_1.js
+54 -down-> 55
+object "program" as 56 #a77df0
+55 -down-> 56
+object "expression_statement" as 57 #a77df0
+56 -down-> 57
+object "polyglot_eval_call" as 58 #777
+58 : EvalFile Error : file not found
+57 -down-> 58
+object "member_expression" as 59 #a77df0
+58 -down-> 59
+object "identifier" as 60 #a77df0
+60 : Polyglot
+60 : ((0, 0))
+59 -down-> 60
+object "." as 62 #a77df0
+62 : ((0, 8))
+59 -down-> 62
+object "property_identifier" as 64 #a77df0
+64 : evalFile
+64 : ((0, 9))
+59 -down-> 64
+object "arguments" as 67 #a77df0
+58 -down-> 67
+object "(" as 68 #a77df0
+68 : ((0, 17))
+67 -down-> 68
+object "string" as 70 #a77df0
+70 : 'python'
+67 -down-> 70
+object "'" as 71 #a77df0
+71 : ((0, 18))
+70 -down-> 71
+object "string_fragment" as 73 #a77df0
+73 : python
+73 : ((0, 19))
+70 -down-> 73
+object "'" as 75 #a77df0
+75 : ((0, 25))
+70 -down-> 75
+object "," as 78 #a77df0
+78 : ((0, 26))
+67 -down-> 78
+object "string" as 80 #a77df0
+80 : 'testsdf.py'
+67 -down-> 80
+object "'" as 81 #a77df0
+81 : ((0, 28))
+80 -down-> 81
+object "string_fragment" as 83 #a77df0
+83 : testsdf.py
+83 : ((0, 29))
+80 -down-> 83
+object "'" as 85 #a77df0
+85 : ((0, 39))
+80 -down-> 85
+object ")" as 88 #a77df0
+88 : ((0, 40))
+67 -down-> 88
+object ";" as 92 #a77df0
+92 : ((0, 41))
+57 -down-> 92
+object "expression_statement" as 95 #a77df0
+56 -down-> 95
+object "polyglot_eval_call" as 96 #777
+96 : EvalFile : test1_2.py
+95 -down-> 96
+object "module" as 97 #7ce37b
+96 -down-> 97
+object "import_statement" as 98 #7ce37b
+97 -down-> 98
+object "import" as 99 #7ce37b
+99 : ((0, 0))
+98 -down-> 99
+object "dotted_name" as 101 #7ce37b
+98 -down-> 101
+object "identifier" as 102 #7ce37b
+102 : polyglot
+102 : ((0, 7))
+101 -down-> 102
+object "expression_statement" as 106 #7ce37b
+97 -down-> 106
+object "polyglot_eval_call" as 107 #777
+107 : EvalFile Error : file not found
+106 -down-> 107
+object "attribute" as 108 #7ce37b
+107 -down-> 108
+object "identifier" as 109 #7ce37b
+109 : polyglot
+109 : ((1, 0))
+108 -down-> 109
+object "." as 111 #7ce37b
+111 : ((1, 8))
+108 -down-> 111
+object "identifier" as 113 #7ce37b
+113 : eval
+113 : ((1, 9))
+108 -down-> 113
+object "argument_list" as 116 #7ce37b
+107 -down-> 116
+object "(" as 117 #7ce37b
+117 : ((1, 13))
+116 -down-> 117
+object "keyword_argument" as 119 #7ce37b
+116 -down-> 119
+object "identifier" as 120 #7ce37b
+120 : language
+120 : ((1, 14))
+119 -down-> 120
+object "=" as 122 #7ce37b
+122 : ((1, 22))
+119 -down-> 122
+object "string" as 124 #7ce37b
+124 : 'python'
+119 -down-> 124
+object "'" as 125 #7ce37b
+125 : ((1, 23))
+124 -down-> 125
+object "'" as 127 #7ce37b
+127 : ((1, 30))
+124 -down-> 127
+object "," as 131 #7ce37b
+131 : ((1, 31))
+116 -down-> 131
+object "keyword_argument" as 133 #7ce37b
+116 -down-> 133
+object "identifier" as 134 #7ce37b
+134 : path
+134 : ((1, 33))
+133 -down-> 134
+object "=" as 136 #7ce37b
+136 : ((1, 37))
+133 -down-> 136
+object "string" as 138 #7ce37b
+138 : 'testaze.py'
+133 -down-> 138
+object "'" as 139 #7ce37b
+139 : ((1, 38))
+138 -down-> 139
+object "'" as 141 #7ce37b
+141 : ((1, 49))
+138 -down-> 141
+object ")" as 145 #7ce37b
+145 : ((1, 50))
+116 -down-> 145
+object "expression_statement" as 150 #7ce37b
+97 -down-> 150
+object "polyglot_export_call" as 151 #219114
+151 : Export : test
+150 -down-> 151
+object "attribute" as 152 #7ce37b
+151 -down-> 152
+object "identifier" as 153 #7ce37b
+153 : polyglot
+153 : ((2, 0))
+152 -down-> 153
+object "." as 155 #7ce37b
+155 : ((2, 8))
+152 -down-> 155
+object "identifier" as 157 #7ce37b
+157 : export_value
+157 : ((2, 9))
+152 -down-> 157
+object "argument_list" as 160 #7ce37b
+151 -down-> 160
+object "(" as 161 #7ce37b
+161 : ((2, 21))
+160 -down-> 161
+object "keyword_argument" as 163 #7ce37b
+160 -down-> 163
+object "identifier" as 164 #7ce37b
+164 : name
+164 : ((2, 22))
+163 -down-> 164
+object "=" as 166 #7ce37b
+166 : ((2, 26))
+163 -down-> 166
+object "string" as 168 #7ce37b
+168 : "test"
+163 -down-> 168
+object "'" as 169 #7ce37b
+169 : ((2, 27))
+168 -down-> 169
+object "'" as 171 #7ce37b
+171 : ((2, 32))
+168 -down-> 171
+object "," as 175 #7ce37b
+175 : ((2, 33))
+160 -down-> 175
+object "keyword_argument" as 177 #7ce37b
+160 -down-> 177
+object "identifier" as 178 #7ce37b
+178 : value
+178 : ((2, 35))
+177 -down-> 178
+object "=" as 180 #7ce37b
+180 : ((2, 40))
+177 -down-> 180
+object "integer" as 182 #7ce37b
+182 : ((2, 41))
+177 -down-> 182
+object ")" as 185 #7ce37b
+185 : ((2, 42))
+160 -down-> 185
+object "expression_statement" as 190 #7ce37b
+97 -down-> 190
+object "polyglot_import_call" as 191 #219114
+191 : Import : azeddfsdfsdf
+190 -down-> 191
+object "attribute" as 192 #7ce37b
+191 -down-> 192
+object "identifier" as 193 #7ce37b
+193 : polyglot
+193 : ((3, 0))
+192 -down-> 193
+object "." as 195 #7ce37b
+195 : ((3, 8))
+192 -down-> 195
+object "identifier" as 197 #7ce37b
+197 : import_value
+197 : ((3, 9))
+192 -down-> 197
+object "argument_list" as 200 #7ce37b
+191 -down-> 200
+object "(" as 201 #7ce37b
+201 : ((3, 21))
+200 -down-> 201
+object "string" as 203 #7ce37b
+203 : 'azeddfsdfsdf'
+200 -down-> 203
+object "'" as 204 #7ce37b
+204 : ((3, 22))
+203 -down-> 204
+object "'" as 206 #7ce37b
+206 : ((3, 35))
+203 -down-> 206
+object ")" as 209 #7ce37b
+209 : ((3, 36))
+200 -down-> 209
+object ";" as 216 #a77df0
+216 : ((1, 41))
+95 -down-> 216
+object "expression_statement" as 219 #a77df0
+56 -down-> 219
+object "polyglot_export_call" as 220 #6c26de
+220 : Export : variable
+219 -down-> 220
+object "member_expression" as 221 #a77df0
+220 -down-> 221
+object "identifier" as 222 #a77df0
+222 : Polyglot
+222 : ((2, 0))
+221 -down-> 222
+object "." as 224 #a77df0
+224 : ((2, 8))
+221 -down-> 224
+object "property_identifier" as 226 #a77df0
+226 : export
+226 : ((2, 9))
+221 -down-> 226
+object "arguments" as 229 #a77df0
+220 -down-> 229
+object "(" as 230 #a77df0
+230 : ((2, 15))
+229 -down-> 230
+object "string" as 232 #a77df0
+232 : 'variable'
+229 -down-> 232
+object "'" as 233 #a77df0
+233 : ((2, 16))
+232 -down-> 233
+object "string_fragment" as 235 #a77df0
+235 : variable
+235 : ((2, 17))
+232 -down-> 235
+object "'" as 237 #a77df0
+237 : ((2, 25))
+232 -down-> 237
+object "," as 240 #a77df0
+240 : ((2, 26))
+229 -down-> 240
+object "string" as 242 #a77df0
+242 : "etsdfet"
+229 -down-> 242
+object "'" as 243 #a77df0
+243 : ((2, 28))
+242 -down-> 243
+object "string_fragment" as 245 #a77df0
+245 : etsdfet
+245 : ((2, 29))
+242 -down-> 245
+object "'" as 247 #a77df0
+247 : ((2, 36))
+242 -down-> 247
+object ")" as 250 #a77df0
+250 : ((2, 37))
+229 -down-> 250
+object "expression_statement" as 255 #a77df0
+56 -down-> 255
+object "polyglot_import_call" as 256 #6c26de
+256 : Import : oui
+255 -down-> 256
+object "member_expression" as 257 #a77df0
+256 -down-> 257
+object "identifier" as 258 #a77df0
+258 : Polyglot
+258 : ((3, 0))
+257 -down-> 258
+object "." as 260 #a77df0
+260 : ((3, 8))
+257 -down-> 260
+object "property_identifier" as 262 #a77df0
+262 : import
+262 : ((3, 9))
+257 -down-> 262
+object "arguments" as 265 #a77df0
+256 -down-> 265
+object "(" as 266 #a77df0
+266 : ((3, 15))
+265 -down-> 266
+object "string" as 268 #a77df0
+268 : 'oui'
+265 -down-> 268
+object "'" as 269 #a77df0
+269 : ((3, 16))
+268 -down-> 269
+object "string_fragment" as 271 #a77df0
+271 : oui
+271 : ((3, 17))
+268 -down-> 271
+object "'" as 273 #a77df0
+273 : ((3, 20))
+268 -down-> 273
+object ")" as 276 #a77df0
+276 : ((3, 21))
+265 -down-> 276
+object "expression_statement" as 284 #f1f299
+1 -down-> 284
+object "assignment" as 285 #f1f299
+284 -down-> 285
+object "identifier" as 286 #f1f299
+286 : test
+286 : ((3, 0))
+285 -down-> 286
+object "=" as 288 #f1f299
+288 : ((3, 5))
+285 -down-> 288
+object "polyglot_import_call" as 290 #ffff1c
+290 : Import : test
+285 -down-> 290
+object "attribute" as 291 #f1f299
+290 -down-> 291
+object "identifier" as 292 #f1f299
+292 : polyglot
+292 : ((3, 7))
+291 -down-> 292
+object "." as 294 #f1f299
+294 : ((3, 15))
+291 -down-> 294
+object "identifier" as 296 #f1f299
+296 : import_value
+296 : ((3, 16))
+291 -down-> 296
+object "argument_list" as 299 #f1f299
+290 -down-> 299
+object "(" as 300 #f1f299
+300 : ((3, 28))
+299 -down-> 300
+object "string" as 302 #f1f299
+302 : "test"
+299 -down-> 302
+object "'" as 303 #f1f299
+303 : ((3, 29))
+302 -down-> 303
+object "'" as 305 #f1f299
+305 : ((3, 34))
+302 -down-> 305
+object ")" as 308 #f1f299
+308 : ((3, 35))
+299 -down-> 308
+object "expression_statement" as 314 #f1f299
+1 -down-> 314
+object "polyglot_export_call" as 315 #ffff1c
+315 : Export : vie
+314 -down-> 315
+object "attribute" as 316 #f1f299
+315 -down-> 316
+object "identifier" as 317 #f1f299
+317 : polyglot
+317 : ((4, 0))
+316 -down-> 317
+object "." as 319 #f1f299
+319 : ((4, 8))
+316 -down-> 319
+object "identifier" as 321 #f1f299
+321 : export_value
+321 : ((4, 9))
+316 -down-> 321
+object "argument_list" as 324 #f1f299
+315 -down-> 324
+object "(" as 325 #f1f299
+325 : ((4, 21))
+324 -down-> 325
+object "keyword_argument" as 327 #f1f299
+324 -down-> 327
+object "identifier" as 328 #f1f299
+328 : name
+328 : ((4, 22))
+327 -down-> 328
+object "=" as 330 #f1f299
+330 : ((4, 26))
+327 -down-> 330
+object "string" as 332 #f1f299
+332 : 'vie'
+327 -down-> 332
+object "'" as 333 #f1f299
+333 : ((4, 27))
+332 -down-> 333
+object "'" as 335 #f1f299
+335 : ((4, 31))
+332 -down-> 335
+object "," as 339 #f1f299
+339 : ((4, 32))
+324 -down-> 339
+object "keyword_argument" as 341 #f1f299
+324 -down-> 341
+object "identifier" as 342 #f1f299
+342 : value
+342 : ((4, 34))
+341 -down-> 342
+object "=" as 344 #f1f299
+344 : ((4, 39))
+341 -down-> 344
+object "integer" as 346 #f1f299
+346 : ((4, 40))
+341 -down-> 346
+object ")" as 349 #f1f299
+349 : ((4, 41))
+324 -down-> 349
+object "comment" as 354 #f1f299
+354 : #ouioui = polyglot.export_value(value=3, name='vie')
+354 : ((5, 0))
+1 -down-> 354
+object "expression_statement" as 356 #f1f299
+1 -down-> 356
+object "assignment" as 357 #f1f299
+356 -down-> 357
+object "identifier" as 358 #f1f299
+358 : vie
+358 : ((6, 0))
+357 -down-> 358
+object "=" as 360 #f1f299
+360 : ((6, 4))
+357 -down-> 360
+object "polyglot_import_call" as 362 #ffff1c
+362 : Import : vie
+357 -down-> 362
+object "attribute" as 363 #f1f299
+362 -down-> 363
+object "identifier" as 364 #f1f299
+364 : polyglot
+364 : ((6, 6))
+363 -down-> 364
+object "." as 366 #f1f299
+366 : ((6, 14))
+363 -down-> 366
+object "identifier" as 368 #f1f299
+368 : import_value
+368 : ((6, 15))
+363 -down-> 368
+object "argument_list" as 371 #f1f299
+362 -down-> 371
+object "(" as 372 #f1f299
+372 : ((6, 27))
+371 -down-> 372
+object "keyword_argument" as 374 #f1f299
+371 -down-> 374
+object "identifier" as 375 #f1f299
+375 : name
+375 : ((6, 28))
+374 -down-> 375
+object "=" as 377 #f1f299
+377 : ((6, 32))
+374 -down-> 377
+object "string" as 379 #f1f299
+379 : "vie"
+374 -down-> 379
+object "'" as 380 #f1f299
+380 : ((6, 33))
+379 -down-> 380
+object "'" as 382 #f1f299
+382 : ((6, 37))
+379 -down-> 382
+object ")" as 386 #f1f299
+386 : ((6, 38))
+371 -down-> 386
+object "expression_statement" as 392 #f1f299
+1 -down-> 392
+object "polyglot_export_call" as 393 #ffff1c
+393 : Export : azeazeaze
+392 -down-> 393
+object "attribute" as 394 #f1f299
+393 -down-> 394
+object "identifier" as 395 #f1f299
+395 : polyglot
+395 : ((7, 0))
+394 -down-> 395
+object "." as 397 #f1f299
+397 : ((7, 8))
+394 -down-> 397
+object "identifier" as 399 #f1f299
+399 : export_value
+399 : ((7, 9))
+394 -down-> 399
+object "argument_list" as 402 #f1f299
+393 -down-> 402
+object "(" as 403 #f1f299
+403 : ((7, 21))
+402 -down-> 403
+object "keyword_argument" as 405 #f1f299
+402 -down-> 405
+object "identifier" as 406 #f1f299
+406 : value
+406 : ((7, 22))
+405 -down-> 406
+object "=" as 408 #f1f299
+408 : ((7, 27))
+405 -down-> 408
+object "string" as 410 #f1f299
+410 : "ttt"
+405 -down-> 410
+object "'" as 411 #f1f299
+411 : ((7, 28))
+410 -down-> 411
+object "'" as 413 #f1f299
+413 : ((7, 32))
+410 -down-> 413
+object "," as 417 #f1f299
+417 : ((7, 33))
+402 -down-> 417
+object "keyword_argument" as 419 #f1f299
+402 -down-> 419
+object "identifier" as 420 #f1f299
+420 : name
+420 : ((7, 35))
+419 -down-> 420
+object "=" as 422 #f1f299
+422 : ((7, 39))
+419 -down-> 422
+object "string" as 424 #f1f299
+424 : 'azeazeaze'
+419 -down-> 424
+object "'" as 425 #f1f299
+425 : ((7, 40))
+424 -down-> 425
+object "'" as 427 #f1f299
+427 : ((7, 50))
+424 -down-> 427
+object ")" as 431 #f1f299
+431 : ((7, 51))
+402 -down-> 431
+object "expression_statement" as 436 #f1f299
+1 -down-> 436
+object "assignment" as 437 #f1f299
+436 -down-> 437
+object "identifier" as 438 #f1f299
+438 : oui
+438 : ((8, 0))
+437 -down-> 438
+object "=" as 440 #f1f299
+440 : ((8, 4))
+437 -down-> 440
+object "polyglot_import_call" as 442 #ffff1c
+442 : Import : azeazeaze
+437 -down-> 442
+object "attribute" as 443 #f1f299
+442 -down-> 443
+object "identifier" as 444 #f1f299
+444 : polyglot
+444 : ((8, 6))
+443 -down-> 444
+object "." as 446 #f1f299
+446 : ((8, 14))
+443 -down-> 446
+object "identifier" as 448 #f1f299
+448 : import_value
+448 : ((8, 15))
+443 -down-> 448
+object "argument_list" as 451 #f1f299
+442 -down-> 451
+object "(" as 452 #f1f299
+452 : ((8, 27))
+451 -down-> 452
+object "string" as 454 #f1f299
+454 : 'azeazeaze'
+451 -down-> 454
+object "'" as 455 #f1f299
+455 : ((8, 28))
+454 -down-> 455
+object "'" as 457 #f1f299
+457 : ((8, 38))
+454 -down-> 457
+object ")" as 460 #f1f299
+460 : ((8, 39))
+451 -down-> 460
+object "comment" as 466 #f1f299
+466 : #polyglot.export_value(value="ttt", name='azeazeaze')
+466 : ((9, 0))
+1 -down-> 466
+object "comment" as 468 #f1f299
+468 : #print("azesqdwxcqsd")qsd
+468 : ((10, 0))
+1 -down-> 468
+object "expression_statement" as 470 #f1f299
+1 -down-> 470
+object "assignment" as 471 #f1f299
+470 -down-> 471
+object "identifier" as 472 #f1f299
+472 : test
+472 : ((11, 0))
+471 -down-> 472
+object "=" as 474 #f1f299
+474 : ((11, 5))
+471 -down-> 474
+object "polyglot_import_call" as 476 #ffff1c
+476 : Import : variable
+471 -down-> 476
+object "attribute" as 477 #f1f299
+476 -down-> 477
+object "identifier" as 478 #f1f299
+478 : polyglot
+478 : ((11, 7))
+477 -down-> 478
+object "." as 480 #f1f299
+480 : ((11, 15))
+477 -down-> 480
+object "identifier" as 482 #f1f299
+482 : import_value
+482 : ((11, 16))
+477 -down-> 482
+object "argument_list" as 485 #f1f299
+476 -down-> 485
+object "(" as 486 #f1f299
+486 : ((11, 28))
+485 -down-> 486
+object "string" as 488 #f1f299
+488 : 'variable'
+485 -down-> 488
+object "'" as 489 #f1f299
+489 : ((11, 29))
+488 -down-> 489
+object "'" as 491 #f1f299
+491 : ((11, 38))
+488 -down-> 491
+object ")" as 494 #f1f299
+494 : ((11, 39))
+485 -down-> 494
+@enduml

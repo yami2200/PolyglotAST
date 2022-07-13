@@ -1,338 +1,374 @@
 @startuml
-object "AST" as AST
-object "program" as program0
-AST -down-> program0
-object "variable_declaration" as variable_declaration1
-program0 -down-> variable_declaration1
-object "var" as 2
-2 : var((1, 0))
-variable_declaration1 -down-> 2
-object "variable_declarator" as variable_declarator3
-variable_declaration1 -down-> variable_declarator3
-object "identifier" as 4
-4 : myArray((1, 4))
-variable_declarator3 -down-> 4
-object "=" as 5
-5 : =((1, 12))
-variable_declarator3 -down-> 5
-object "array" as array6
-variable_declarator3 -down-> array6
-object "[" as 7
-7 : [((1, 14))
-array6 -down-> 7
-object "number" as 8
-8 : 42((1, 15))
-array6 -down-> 8
-object "," as 9
-9 : ,((1, 17))
-array6 -down-> 9
-object "number" as 10
-10 : 1337((1, 19))
-array6 -down-> 10
-object "," as 11
-11 : ,((1, 23))
-array6 -down-> 11
-object "number" as 12
-12 : 360((1, 25))
-array6 -down-> 12
-object "," as 13
-13 : ,((1, 28))
-array6 -down-> 13
-object "number" as 14
-14 : 12((1, 30))
-array6 -down-> 14
-object "," as 15
-15 : ,((1, 32))
-array6 -down-> 15
-object "number" as 16
-16 : 123456((1, 34))
-array6 -down-> 16
-object "]" as 17
-17 : ]((1, 40))
-array6 -down-> 17
-object "expression_statement" as expression_statement18
-program0 -down-> expression_statement18
-object "polyglot_export_call" as polyglot_export_call19
-expression_statement18 -down-> polyglot_export_call19
-object "member_expression" as member_expression20
-polyglot_export_call19 -down-> member_expression20
-object "identifier" as 21
-21 : Polyglot((3, 0))
-member_expression20 -down-> 21
-object "." as 22
-22 : .((3, 8))
-member_expression20 -down-> 22
-object "property_identifier" as 23
-23 : export((3, 9))
-member_expression20 -down-> 23
-object "arguments" as arguments24
-polyglot_export_call19 -down-> arguments24
-object "(" as 25
-25 : (((3, 15))
-arguments24 -down-> 25
-object "string" as string26
-arguments24 -down-> string26
-object "'" as 27
-27 : '((3, 16))
-string26 -down-> 27
-object "string_fragment" as 28
-28 : tableau((3, 17))
-string26 -down-> 28
-object "'" as 29
-29 : '((3, 24))
-string26 -down-> 29
-object "," as 30
-30 : ,((3, 25))
-arguments24 -down-> 30
-object "identifier" as 31
-31 : myArray((3, 27))
-arguments24 -down-> 31
-object ")" as 32
-32 : )((3, 34))
-arguments24 -down-> 32
-object "expression_statement" as expression_statement33
-program0 -down-> expression_statement33
-object "polyglot_eval_call" as polyglot_eval_call34
-expression_statement33 -down-> polyglot_eval_call34
-object "module" as module35
-polyglot_eval_call34 -down-> module35
-object "import_statement" as import_statement36
-module35 -down-> import_statement36
-object "import" as 37
-37 : import((1, 0))
-import_statement36 -down-> 37
-object "dotted_name" as dotted_name38
-import_statement36 -down-> dotted_name38
-object "identifier" as 39
-39 : polyglot((1, 7))
-dotted_name38 -down-> 39
-object "function_definition" as function_definition40
-module35 -down-> function_definition40
-object "def" as 41
-41 : def((4, 0))
-function_definition40 -down-> 41
-object "identifier" as 42
-42 : complicated_number_computation((4, 4))
-function_definition40 -down-> 42
-object "parameters" as parameters43
-function_definition40 -down-> parameters43
-object "(" as 44
-44 : (((4, 34))
-parameters43 -down-> 44
-object ")" as 45
-45 : )((4, 35))
-parameters43 -down-> 45
-object ":" as 46
-46 : :((4, 36))
-function_definition40 -down-> 46
-object "block" as block47
-function_definition40 -down-> block47
-object "return_statement" as return_statement48
-block47 -down-> return_statement48
-object "return" as 49
-49 : return((5, 4))
-return_statement48 -down-> 49
-object "integer" as 50
-50 : 7((5, 11))
-return_statement48 -down-> 50
-object "expression_statement" as expression_statement51
-module35 -down-> expression_statement51
-object "assignment" as assignment52
-expression_statement51 -down-> assignment52
-object "identifier" as 53
-53 : array((7, 0))
-assignment52 -down-> 53
-object "=" as 54
-54 : =((7, 6))
-assignment52 -down-> 54
-object "polyglot_import_call" as polyglot_import_call55
-assignment52 -down-> polyglot_import_call55
-object "attribute" as attribute56
-polyglot_import_call55 -down-> attribute56
-object "identifier" as 57
-57 : polyglot((7, 8))
-attribute56 -down-> 57
-object "." as 58
-58 : .((7, 16))
-attribute56 -down-> 58
-object "identifier" as 59
-59 : import_value((7, 17))
-attribute56 -down-> 59
-object "argument_list" as argument_list60
-polyglot_import_call55 -down-> argument_list60
-object "(" as 61
-61 : (((7, 29))
-argument_list60 -down-> 61
-object "string" as string62
-argument_list60 -down-> string62
-object "'" as 63
-63 : '((7, 30))
-string62 -down-> 63
-object "'" as 64
-64 : '((7, 38))
-string62 -down-> 64
-object ")" as 65
-65 : )((7, 39))
-argument_list60 -down-> 65
-object "expression_statement" as expression_statement66
-module35 -down-> expression_statement66
-object "assignment" as assignment67
-expression_statement66 -down-> assignment67
-object "subscript" as subscript68
-assignment67 -down-> subscript68
-object "identifier" as 69
-69 : array((8, 0))
-subscript68 -down-> 69
-object "[" as 70
-70 : [((8, 5))
-subscript68 -down-> 70
-object "integer" as 71
-71 : 4((8, 6))
-subscript68 -down-> 71
-object "]" as 72
-72 : ]((8, 7))
-subscript68 -down-> 72
-object "=" as 73
-73 : =((8, 9))
-assignment67 -down-> 73
-object "call" as call74
-assignment67 -down-> call74
-object "identifier" as 75
-75 : complicated_number_computation((8, 11))
-call74 -down-> 75
-object "argument_list" as argument_list76
-call74 -down-> argument_list76
-object "(" as 77
-77 : (((8, 41))
-argument_list76 -down-> 77
-object ")" as 78
-78 : )((8, 42))
-argument_list76 -down-> 78
-object "expression_statement" as expression_statement79
-module35 -down-> expression_statement79
-object "call" as call80
-expression_statement79 -down-> call80
-object "identifier" as 81
-81 : print((10, 0))
-call80 -down-> 81
-object "argument_list" as argument_list82
-call80 -down-> argument_list82
-object "(" as 83
-83 : (((10, 5))
-argument_list82 -down-> 83
-object "string" as string84
-argument_list82 -down-> string84
-object "'" as 85
-85 : "((10, 6))
-string84 -down-> 85
-object "'" as 86
-86 : "((10, 40))
-string84 -down-> 86
-object ")" as 87
-87 : )((10, 41))
-argument_list82 -down-> 87
-object "expression_statement" as expression_statement88
-module35 -down-> expression_statement88
-object "call" as call89
-expression_statement88 -down-> call89
-object "identifier" as 90
-90 : print((11, 0))
-call89 -down-> 90
-object "argument_list" as argument_list91
-call89 -down-> argument_list91
-object "(" as 92
-92 : (((11, 5))
-argument_list91 -down-> 92
-object "identifier" as 93
-93 : array((11, 6))
-argument_list91 -down-> 93
-object ")" as 94
-94 : )((11, 11))
-argument_list91 -down-> 94
-object "expression_statement" as expression_statement95
-module35 -down-> expression_statement95
-object "call" as call96
-expression_statement95 -down-> call96
-object "attribute" as attribute97
-call96 -down-> attribute97
-object "identifier" as 98
-98 : array((13, 0))
-attribute97 -down-> 98
-object "." as 99
-99 : .((13, 5))
-attribute97 -down-> 99
-object "identifier" as 100
-100 : sort((13, 6))
-attribute97 -down-> 100
-object "argument_list" as argument_list101
-call96 -down-> argument_list101
-object "(" as 102
-102 : (((13, 10))
-argument_list101 -down-> 102
-object ")" as 103
-103 : )((13, 11))
-argument_list101 -down-> 103
-object "comment" as 104
-104 : # uses the JS lexical order sorting, not python's list.sort() !((13, 13))
-module35 -down-> 104
-object "expression_statement" as expression_statement105
-program0 -down-> expression_statement105
-object "call_expression" as call_expression106
-expression_statement105 -down-> call_expression106
-object "member_expression" as member_expression107
-call_expression106 -down-> member_expression107
-object "identifier" as 108
-108 : console((6, 0))
-member_expression107 -down-> 108
-object "." as 109
-109 : .((6, 7))
-member_expression107 -down-> 109
-object "property_identifier" as 110
-110 : log((6, 8))
-member_expression107 -down-> 110
-object "arguments" as arguments111
-call_expression106 -down-> arguments111
-object "(" as 112
-112 : (((6, 11))
-arguments111 -down-> 112
-object "string" as string113
-arguments111 -down-> string113
-object "'" as 114
-114 : "((6, 12))
-string113 -down-> 114
-object "string_fragment" as 115
-115 : Displaying the array in JS again after it was 'sorted' in python :((6, 13))
-string113 -down-> 115
-object "'" as 116
-116 : "((6, 79))
-string113 -down-> 116
-object ")" as 117
-117 : )((6, 80))
-arguments111 -down-> 117
-object "expression_statement" as expression_statement118
-program0 -down-> expression_statement118
-object "call_expression" as call_expression119
-expression_statement118 -down-> call_expression119
-object "member_expression" as member_expression120
-call_expression119 -down-> member_expression120
-object "identifier" as 121
-121 : console((7, 0))
-member_expression120 -down-> 121
-object "." as 122
-122 : .((7, 7))
-member_expression120 -down-> 122
-object "property_identifier" as 123
-123 : log((7, 8))
-member_expression120 -down-> 123
-object "arguments" as arguments124
-call_expression119 -down-> arguments124
-object "(" as 125
-125 : (((7, 11))
-arguments124 -down-> 125
-object "identifier" as 126
-126 : myArray((7, 12))
-arguments124 -down-> 126
-object ")" as 127
-127 : )((7, 19))
-arguments124 -down-> 127
+object "Polyglot AST" as 0 #666
+object "program" as 1 #7ce37b
+0 -down-> 1
+object "variable_declaration" as 2 #7ce37b
+1 -down-> 2
+object "var" as 3 #7ce37b
+3 : ((1, 0))
+2 -down-> 3
+object "variable_declarator" as 5 #7ce37b
+2 -down-> 5
+object "identifier" as 6 #7ce37b
+6 : myArray
+6 : ((1, 4))
+5 -down-> 6
+object "=" as 8 #7ce37b
+8 : ((1, 12))
+5 -down-> 8
+object "array" as 10 #7ce37b
+5 -down-> 10
+object "[" as 11 #7ce37b
+11 : ((1, 14))
+10 -down-> 11
+object "number" as 13 #7ce37b
+13 : 42
+13 : ((1, 15))
+10 -down-> 13
+object "," as 15 #7ce37b
+15 : ((1, 17))
+10 -down-> 15
+object "number" as 17 #7ce37b
+17 : 1337
+17 : ((1, 19))
+10 -down-> 17
+object "," as 19 #7ce37b
+19 : ((1, 23))
+10 -down-> 19
+object "number" as 21 #7ce37b
+21 : 360
+21 : ((1, 25))
+10 -down-> 21
+object "," as 23 #7ce37b
+23 : ((1, 28))
+10 -down-> 23
+object "number" as 25 #7ce37b
+25 : 12
+25 : ((1, 30))
+10 -down-> 25
+object "," as 27 #7ce37b
+27 : ((1, 32))
+10 -down-> 27
+object "number" as 29 #7ce37b
+29 : 123456
+29 : ((1, 34))
+10 -down-> 29
+object "]" as 31 #7ce37b
+31 : ((1, 40))
+10 -down-> 31
+object "expression_statement" as 36 #7ce37b
+1 -down-> 36
+object "polyglot_export_call" as 37 #219114
+37 : Export : tableau
+36 -down-> 37
+object "member_expression" as 38 #7ce37b
+37 -down-> 38
+object "identifier" as 39 #7ce37b
+39 : Polyglot
+39 : ((3, 0))
+38 -down-> 39
+object "." as 41 #7ce37b
+41 : ((3, 8))
+38 -down-> 41
+object "property_identifier" as 43 #7ce37b
+43 : export
+43 : ((3, 9))
+38 -down-> 43
+object "arguments" as 46 #7ce37b
+37 -down-> 46
+object "(" as 47 #7ce37b
+47 : ((3, 15))
+46 -down-> 47
+object "string" as 49 #7ce37b
+49 : 'tableau'
+46 -down-> 49
+object "'" as 50 #7ce37b
+50 : ((3, 16))
+49 -down-> 50
+object "string_fragment" as 52 #7ce37b
+52 : tableau
+52 : ((3, 17))
+49 -down-> 52
+object "'" as 54 #7ce37b
+54 : ((3, 24))
+49 -down-> 54
+object "," as 57 #7ce37b
+57 : ((3, 25))
+46 -down-> 57
+object "identifier" as 59 #7ce37b
+59 : myArray
+59 : ((3, 27))
+46 -down-> 59
+object ")" as 61 #7ce37b
+61 : ((3, 34))
+46 -down-> 61
+object "expression_statement" as 66 #7ce37b
+1 -down-> 66
+object "polyglot_eval_call" as 67 #777
+67 : EvalFile : arraysort.py
+66 -down-> 67
+object "module" as 68 #6f9eed
+67 -down-> 68
+object "import_statement" as 69 #6f9eed
+68 -down-> 69
+object "import" as 70 #6f9eed
+70 : ((1, 0))
+69 -down-> 70
+object "dotted_name" as 72 #6f9eed
+69 -down-> 72
+object "identifier" as 73 #6f9eed
+73 : polyglot
+73 : ((1, 7))
+72 -down-> 73
+object "function_definition" as 77 #6f9eed
+68 -down-> 77
+object "def" as 78 #6f9eed
+78 : ((4, 0))
+77 -down-> 78
+object "identifier" as 80 #6f9eed
+80 : complicated_number_computation
+80 : ((4, 4))
+77 -down-> 80
+object "parameters" as 82 #6f9eed
+77 -down-> 82
+object "(" as 83 #6f9eed
+83 : ((4, 34))
+82 -down-> 83
+object ")" as 85 #6f9eed
+85 : ((4, 35))
+82 -down-> 85
+object ":" as 88 #6f9eed
+88 : ((4, 36))
+77 -down-> 88
+object "block" as 90 #6f9eed
+77 -down-> 90
+object "return_statement" as 91 #6f9eed
+90 -down-> 91
+object "return" as 92 #6f9eed
+92 : ((5, 4))
+91 -down-> 92
+object "integer" as 94 #6f9eed
+94 : ((5, 11))
+91 -down-> 94
+object "expression_statement" as 99 #6f9eed
+68 -down-> 99
+object "assignment" as 100 #6f9eed
+99 -down-> 100
+object "identifier" as 101 #6f9eed
+101 : array
+101 : ((7, 0))
+100 -down-> 101
+object "=" as 103 #6f9eed
+103 : ((7, 6))
+100 -down-> 103
+object "polyglot_import_call" as 105 #1d63db
+105 : Import : tableau
+100 -down-> 105
+object "attribute" as 106 #6f9eed
+105 -down-> 106
+object "identifier" as 107 #6f9eed
+107 : polyglot
+107 : ((7, 8))
+106 -down-> 107
+object "." as 109 #6f9eed
+109 : ((7, 16))
+106 -down-> 109
+object "identifier" as 111 #6f9eed
+111 : import_value
+111 : ((7, 17))
+106 -down-> 111
+object "argument_list" as 114 #6f9eed
+105 -down-> 114
+object "(" as 115 #6f9eed
+115 : ((7, 29))
+114 -down-> 115
+object "string" as 117 #6f9eed
+117 : 'tableau'
+114 -down-> 117
+object "'" as 118 #6f9eed
+118 : ((7, 30))
+117 -down-> 118
+object "'" as 120 #6f9eed
+120 : ((7, 38))
+117 -down-> 120
+object ")" as 123 #6f9eed
+123 : ((7, 39))
+114 -down-> 123
+object "expression_statement" as 129 #6f9eed
+68 -down-> 129
+object "assignment" as 130 #6f9eed
+129 -down-> 130
+object "subscript" as 131 #6f9eed
+130 -down-> 131
+object "identifier" as 132 #6f9eed
+132 : array
+132 : ((8, 0))
+131 -down-> 132
+object "[" as 134 #6f9eed
+134 : ((8, 5))
+131 -down-> 134
+object "integer" as 136 #6f9eed
+136 : ((8, 6))
+131 -down-> 136
+object "]" as 138 #6f9eed
+138 : ((8, 7))
+131 -down-> 138
+object "=" as 141 #6f9eed
+141 : ((8, 9))
+130 -down-> 141
+object "call" as 143 #6f9eed
+130 -down-> 143
+object "identifier" as 144 #6f9eed
+144 : complicated_number_computation
+144 : ((8, 11))
+143 -down-> 144
+object "argument_list" as 146 #6f9eed
+143 -down-> 146
+object "(" as 147 #6f9eed
+147 : ((8, 41))
+146 -down-> 147
+object ")" as 149 #6f9eed
+149 : ((8, 42))
+146 -down-> 149
+object "expression_statement" as 155 #6f9eed
+68 -down-> 155
+object "call" as 156 #6f9eed
+155 -down-> 156
+object "identifier" as 157 #6f9eed
+157 : print
+157 : ((10, 0))
+156 -down-> 157
+object "argument_list" as 159 #6f9eed
+156 -down-> 159
+object "(" as 160 #6f9eed
+160 : ((10, 5))
+159 -down-> 160
+object "string" as 162 #6f9eed
+162 : "Our array transferred to python :"
+159 -down-> 162
+object "'" as 163 #6f9eed
+163 : ((10, 6))
+162 -down-> 163
+object "'" as 165 #6f9eed
+165 : ((10, 40))
+162 -down-> 165
+object ")" as 168 #6f9eed
+168 : ((10, 41))
+159 -down-> 168
+object "expression_statement" as 173 #6f9eed
+68 -down-> 173
+object "call" as 174 #6f9eed
+173 -down-> 174
+object "identifier" as 175 #6f9eed
+175 : print
+175 : ((11, 0))
+174 -down-> 175
+object "argument_list" as 177 #6f9eed
+174 -down-> 177
+object "(" as 178 #6f9eed
+178 : ((11, 5))
+177 -down-> 178
+object "identifier" as 180 #6f9eed
+180 : array
+180 : ((11, 6))
+177 -down-> 180
+object ")" as 182 #6f9eed
+182 : ((11, 11))
+177 -down-> 182
+object "expression_statement" as 187 #6f9eed
+68 -down-> 187
+object "call" as 188 #6f9eed
+187 -down-> 188
+object "attribute" as 189 #6f9eed
+188 -down-> 189
+object "identifier" as 190 #6f9eed
+190 : array
+190 : ((13, 0))
+189 -down-> 190
+object "." as 192 #6f9eed
+192 : ((13, 5))
+189 -down-> 192
+object "identifier" as 194 #6f9eed
+194 : sort
+194 : ((13, 6))
+189 -down-> 194
+object "argument_list" as 197 #6f9eed
+188 -down-> 197
+object "(" as 198 #6f9eed
+198 : ((13, 10))
+197 -down-> 198
+object ")" as 200 #6f9eed
+200 : ((13, 11))
+197 -down-> 200
+object "comment" as 205 #6f9eed
+205 : # uses the JS lexical order sorting, not python's list.sort() !
+205 : ((13, 13))
+68 -down-> 205
+object "expression_statement" as 210 #7ce37b
+1 -down-> 210
+object "call_expression" as 211 #7ce37b
+210 -down-> 211
+object "member_expression" as 212 #7ce37b
+211 -down-> 212
+object "identifier" as 213 #7ce37b
+213 : console
+213 : ((6, 0))
+212 -down-> 213
+object "." as 215 #7ce37b
+215 : ((6, 7))
+212 -down-> 215
+object "property_identifier" as 217 #7ce37b
+217 : log
+217 : ((6, 8))
+212 -down-> 217
+object "arguments" as 220 #7ce37b
+211 -down-> 220
+object "(" as 221 #7ce37b
+221 : ((6, 11))
+220 -down-> 221
+object "string" as 223 #7ce37b
+223 : "Displaying the array in JS again after it was 'sorted' in python :"
+220 -down-> 223
+object "'" as 224 #7ce37b
+224 : ((6, 12))
+223 -down-> 224
+object "string_fragment" as 226 #7ce37b
+226 : Displaying the array in JS again after it was 'sorted' in python :
+226 : ((6, 13))
+223 -down-> 226
+object "'" as 228 #7ce37b
+228 : ((6, 79))
+223 -down-> 228
+object ")" as 231 #7ce37b
+231 : ((6, 80))
+220 -down-> 231
+object "expression_statement" as 236 #7ce37b
+1 -down-> 236
+object "call_expression" as 237 #7ce37b
+236 -down-> 237
+object "member_expression" as 238 #7ce37b
+237 -down-> 238
+object "identifier" as 239 #7ce37b
+239 : console
+239 : ((7, 0))
+238 -down-> 239
+object "." as 241 #7ce37b
+241 : ((7, 7))
+238 -down-> 241
+object "property_identifier" as 243 #7ce37b
+243 : log
+243 : ((7, 8))
+238 -down-> 243
+object "arguments" as 246 #7ce37b
+237 -down-> 246
+object "(" as 247 #7ce37b
+247 : ((7, 11))
+246 -down-> 247
+object "identifier" as 249 #7ce37b
+249 : myArray
+249 : ((7, 12))
+246 -down-> 249
+object ")" as 251 #7ce37b
+251 : ((7, 19))
+246 -down-> 251
 @enduml

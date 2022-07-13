@@ -1,0 +1,94 @@
+@startuml
+object "Polyglot AST" as 0 #666
+object "module" as 1 #eb7878
+0 -down-> 1
+object "import_statement" as 2 #eb7878
+1 -down-> 2
+object "import" as 3 #eb7878
+3 : ((0, 0))
+2 -down-> 3
+object "dotted_name" as 5 #eb7878
+2 -down-> 5
+object "identifier" as 6 #eb7878
+6 : polyglot
+6 : ((0, 7))
+5 -down-> 6
+object "expression_statement" as 10 #eb7878
+1 -down-> 10
+object "polyglot_eval_call" as 11 #777
+11 : EvalFile : test_cycle.js
+10 -down-> 11
+object "program" as 12 #6f9eed
+11 -down-> 12
+object "expression_statement" as 13 #6f9eed
+12 -down-> 13
+object "polyglot_eval_call" as 14 #777
+14 : EvalFile : test_cycle_2.py
+13 -down-> 14
+object "module" as 15 #f1f299
+14 -down-> 15
+object "import_statement" as 16 #f1f299
+15 -down-> 16
+object "import" as 17 #f1f299
+17 : ((0, 0))
+16 -down-> 17
+object "dotted_name" as 19 #f1f299
+16 -down-> 19
+object "identifier" as 20 #f1f299
+20 : polyglot
+20 : ((0, 7))
+19 -down-> 20
+object "expression_statement" as 24 #f1f299
+15 -down-> 24
+object "polyglot_eval_call" as 25 #777
+25 : EvalFile : test_cycle.py
+24 -down-> 25
+object ";" as 30 #6f9eed
+30 : ((0, 46))
+13 -down-> 30
+object "comment" as 33 #6f9eed
+33 : // test comment
+33 : ((1, 0))
+12 -down-> 33
+object "expression_statement" as 35 #6f9eed
+12 -down-> 35
+object "call_expression" as 36 #6f9eed
+35 -down-> 36
+object "member_expression" as 37 #6f9eed
+36 -down-> 37
+object "identifier" as 38 #6f9eed
+38 : console
+38 : ((2, 0))
+37 -down-> 38
+object "." as 40 #6f9eed
+40 : ((2, 7))
+37 -down-> 40
+object "property_identifier" as 42 #6f9eed
+42 : log
+42 : ((2, 8))
+37 -down-> 42
+object "arguments" as 45 #6f9eed
+36 -down-> 45
+object "(" as 46 #6f9eed
+46 : ((2, 11))
+45 -down-> 46
+object "string" as 48 #6f9eed
+48 : "test"
+45 -down-> 48
+object "'" as 49 #6f9eed
+49 : ((2, 12))
+48 -down-> 49
+object "string_fragment" as 51 #6f9eed
+51 : test
+51 : ((2, 13))
+48 -down-> 51
+object "'" as 53 #6f9eed
+53 : ((2, 17))
+48 -down-> 53
+object ")" as 56 #6f9eed
+56 : ((2, 18))
+45 -down-> 56
+object ";" as 60 #6f9eed
+60 : ((2, 19))
+35 -down-> 60
+@enduml

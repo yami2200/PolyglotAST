@@ -70,7 +70,11 @@ public class App {
 
 
         //PolyglotTreeHandler tree = new PolyglotTreeHandler(code2, "python");
-        //PolyglotTreeHandler tree = new PolyglotTreeHandler(Paths.get("GraalSamples/arraysort.js"), "javascript");
+        PolyglotTreeHandler tree = new PolyglotTreeHandler(Paths.get("GraalSamples/arraysort.js"), "javascript");
+        //PolyglotTreeHandler tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/test_cycle.py")), "python");
+        PolyglotTreeVisualizer visualizer = new PolyglotTreeVisualizer();
+        tree.apply(visualizer);
+        visualizer.save("arraysort.puml");
         //PolyglotTreeHandler tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/test1_host.py")), "python");
         /*PolyglotTreePrinter p = new PolyglotTreePrinter();
         tree.apply(p);*/
@@ -134,12 +138,10 @@ public class App {
 
         System.out.println(" TREE BASIC WITH 3 FILES");*/
 
-        PolyglotTreePrinter p = new PolyglotTreePrinter();
-        PolyglotTreeHandler tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/example4_Cyclic_ImportExportTest/Part2.js")), "javascript");
-        tree.apply(p);
-        p.printUMLInFile("cycle_importexport.puml");
-        PolyglotDUBuilder du = new PolyglotDUBuilder();
-        tree.apply(du);
+        /*PolyglotTreeHandler tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/example3_multihost_diag/host1.py")), "python");
+        PolyglotTreeVisualizer visualizer = new PolyglotTreeVisualizer();
+        tree.apply(visualizer);
+        visualizer.save("multihost_v2.puml");*/
     }
 
 
