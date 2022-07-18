@@ -1,62 +1,57 @@
 package com.example.polyglotast;
 
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
+import com.example.polyglotast.utils.CodeArea;
+import com.example.polyglotast.utils.ExportData;
+import com.example.polyglotast.utils.ImportData;
 import kotlin.Pair;
 
 
 
-public class PolyglotVariableSpotter implements PolyglotTreeProcessor {
+public class PolyglotVariableSpotter extends PolyglotDeepTreeProcessor {
 
-
-    private HashMap<Pair<String, Boolean>, Pair<Integer, Integer>> result; // boolean encodes defined/used
-    private HashMap<Pair<String, Boolean>, Pair<Integer, Integer>> finalResult;
+    private HashMap<String, HashMap<PolyglotTreeHandler, ArrayList<ImportData>>> imports;
+    private HashMap<String, HashMap<PolyglotTreeHandler, ArrayList<ExportData>>> exports;
+    private HashSet<Path> listPathsVisited;
 
     public PolyglotVariableSpotter() {
-        this.result = new HashMap<>();
+        super();
+        this.imports = new HashMap<>();
+        this.exports = new HashMap<>();
     }
 
-    public PolyglotVariableSpotter(HashMap<Pair<String, Boolean>, Pair<Integer, Integer>> previous) {
-        this.result = previous;
+    public HashMap<String, HashMap<PolyglotTreeHandler, ArrayList<ImportData>>> getImports() {
+        return imports;
     }
 
-    public HashMap<Pair<String, Boolean>, Pair<Integer, Integer>> getLocalState() {
-        return this.result;
-    }
-
-    public HashMap<Pair<String, Boolean>, Pair<Integer, Integer>> getFinalState() {
-        return this.finalResult;
+    public HashMap<String, HashMap<PolyglotTreeHandler, ArrayList<ExportData>>> getExports() {
+        return exports;
     }
 
     @Override
-    public void process(PolyglotZipper zipper) {
+    public void processZipperNode(PolyglotZipper zipper) {
         if(zipper.isImport()) {
-            Integer pos = zipper.getPos();
-            Integer end = pos + zipper.getLength();
-            String name = zipper.getBindingName();
-            this.result.put(new Pair<>(name, false), 
-            new Pair<>(pos, end));
+            ImportData imp = new ImportData(zipper);
+            String name = imp.getVar_name();
+            if(!name.equals("")){
+                if(!this.imports.containsKey(name)) this.imports.put(name, new HashMap<>());
+                if(!this.imports.get(name).containsKey(zipper.getCurrentTree())) this.imports.get(name).put(zipper.getCurrentTree(), new ArrayList<>());
+                this.imports.get(name).get(zipper.getCurrentTree()).add(imp);
+            }
         }
-        if(zipper.isExport()) {
-            Integer pos = zipper.getPos();
-            Integer end = pos + zipper.getLength();
-            String name = zipper.getBindingName();
-            this.result.put(new Pair<>(name, true), 
-            new Pair<>(pos, end));
-        }
-
-        PolyglotZipper next = zipper.down();
-        if(next.isNull()) {
-            this.finalResult = this.result;
-        } else {
-            this.finalResult = new HashMap<>();
-        }
-        while (!next.isNull()) {
-            PolyglotVariableSpotter nextp = new PolyglotVariableSpotter(this.result);
-            nextp.process(next);
-            this.finalResult.putAll(nextp.getFinalState());
-            next = next.right();
+        else if(zipper.isExport()) {
+            ExportData exp = new ExportData(zipper);
+            String name = exp.getVar_name();
+            if(!name.equals("")){
+                if(!this.exports.containsKey(name)) this.exports.put(name, new HashMap<>());
+                if(!this.exports.get(name).containsKey(zipper.getCurrentTree())) this.exports.get(name).put(zipper.getCurrentTree(), new ArrayList<>());
+                this.exports.get(name).get(zipper.getCurrentTree()).add(exp);
+            }
         }
     }
-    
+
 }

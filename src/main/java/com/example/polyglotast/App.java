@@ -70,14 +70,18 @@ public class App {
 
 
         //PolyglotTreeHandler tree = new PolyglotTreeHandler(code2, "python");
-        PolyglotTreeHandler tree = new PolyglotTreeHandler(Paths.get("GraalSamples/functionusage.js"), "javascript");
-        //PolyglotTreeHandler tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/test_singlefile.js")), "javascript");
+        //PolyglotTreeHandler tree = new PolyglotTreeHandler(Paths.get("GraalSamples/functionusage.js"), "javascript");
+        /*PolyglotTreeHandler tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/test_singlefile.js")), "javascript");
         PolyglotDUBuilder builder = new PolyglotDUBuilder();
         tree.apply(builder);
         PolyglotTreeVisualizer visualizer = new PolyglotTreeVisualizer();
         tree.apply(visualizer);
-        visualizer.save("functionusage.puml");
-        //PolyglotTreeHandler tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/test1_host.py")), "python");
+        visualizer.save("singleFileLoop.puml");*/
+        /*PolyglotTreeHandler tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/test1_host.py")), "python");
+        PolyglotVariableSpotter variableSpotter = new PolyglotVariableSpotter();
+        tree.apply(variableSpotter);
+        System.out.println(variableSpotter.getImports());
+        System.out.println(variableSpotter.getExports());*/
         /*PolyglotTreePrinter p = new PolyglotTreePrinter();
         tree.apply(p);*/
         //tree.printFilesNotFound();
@@ -144,6 +148,10 @@ public class App {
         PolyglotTreeVisualizer visualizer = new PolyglotTreeVisualizer();
         tree.apply(visualizer);
         visualizer.save("multihost_v2.puml");*/
+
+        PolyglotTreeHandler tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/test1_host.py")), "python");
+        PolyglotVariableSpotter varSpotter = new PolyglotVariableSpotter();
+        tree.apply(varSpotter);
     }
 
 
