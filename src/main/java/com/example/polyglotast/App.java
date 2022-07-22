@@ -5,7 +5,9 @@ import jsitter.api.Text;
 import jsitter.api.Zipper;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -15,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,6 +26,9 @@ import java.util.HashSet;
 public class App {
 
     public static void main(String[] args) throws IOException, URISyntaxException {
+
+        BenchmarkMaker benchmarkMaker = new BenchmarkMaker();
+        if(benchmarkMaker.runBenchmark(args)) return;
 
         String code = "import polyglot\n" +
                 "polyglot.export_value(name=\"test\", value=3)\n" +
@@ -149,11 +155,54 @@ public class App {
         tree.apply(visualizer);
         visualizer.save("multihost_v2.puml");*/
 
-        PolyglotTreeHandler tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/test1_host.py")), "python");
-        PolyglotVariableSpotter varSpotter = new PolyglotVariableSpotter();
-        tree.apply(varSpotter);
+        PolyglotTreeHandler tree;
+        long start = System.currentTimeMillis();
+        //tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/test1_host.py")), "python");
+        long finish = System.currentTimeMillis();
+        long timeElapsed = finish - start;
+        System.out.println(timeElapsed);
+
+        /*start = System.currentTimeMillis();
+        PolyglotTreeHandler.filePathToTreeHandler = new HashMap<>();
+        PolyglotTreeHandler.filePathOfTreeHandler = new HashMap<>();
+        tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/test1_host.py")), "python");
+        finish = System.currentTimeMillis();
+        timeElapsed = finish - start;
+        System.out.println(timeElapsed);
+
+        start = System.currentTimeMillis();
+        PolyglotTreeHandler.filePathToTreeHandler = new HashMap<>();
+        PolyglotTreeHandler.filePathOfTreeHandler = new HashMap<>();
+        tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/test1_host.py")), "python");
+        finish = System.currentTimeMillis();
+        timeElapsed = finish - start;
+        System.out.println(timeElapsed);*/
+
+        System.out.println("JAVSCRIPT");
+
+        start = System.currentTimeMillis();
+        PolyglotTreeHandler.filePathToTreeHandler = new HashMap<>();
+        PolyglotTreeHandler.filePathOfTreeHandler = new HashMap<>();
+        tree = new PolyglotTreeHandler(Paths.get("/home/romain/Desktop/Benchmarks Polyglot AST/Files/polyglot_4files/4files_host.py"), "python");
+        System.out.println(tree.getSubTrees());
+        //tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/example3_multihost_diag/host3.js")), "javascript");
+        finish = System.currentTimeMillis();
+        timeElapsed = finish - start;
+        System.out.println(timeElapsed);
+
+        /*for(int i = 0; i<100; i++){
+            start = System.currentTimeMillis();
+            PolyglotTreeHandler.filePathToTreeHandler = new HashMap<>();
+            PolyglotTreeHandler.filePathOfTreeHandler = new HashMap<>();
+            tree = new PolyglotTreeHandler(Paths.get("/home/romain/Desktop/Benchmarks Polyglot AST/Files/polyglot_2files/2files_host_1,6k.py"), "python");
+            //tree = new PolyglotTreeHandler(Paths.get("eval/client.py"), "python");
+            //tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/example3_multihost_diag/host3.js")), "javascript");
+            finish = System.currentTimeMillis();
+            timeElapsed = finish - start;
+            System.out.println(timeElapsed);
+        }*/
+
+        /*PolyglotVariableSpotter varSpotter = new PolyglotVariableSpotter();
+        tree.apply(varSpotter);*/
     }
-
-
-
 }
