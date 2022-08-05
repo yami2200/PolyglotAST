@@ -26,10 +26,14 @@ public abstract class PolyglotDeepTreeProcessor implements PolyglotTreeProcessor
 
     @Override
     public void process(PolyglotZipper zipper) {
+        this.processStoppable(zipper);
+    }
+
+    public boolean processStoppable(PolyglotZipper zipper){
         this.loopInSingleFile = false;
         if(PolyglotTreeHandler.getfilePathOfTreeHandler().containsKey(zipper.getCurrentTree())) listPathsVisited.add(PolyglotTreeHandler.getfilePathOfTreeHandler().get(zipper.getCurrentTree()));
 
-        this.processZipperNode(zipper);
+        if(!this.processZipperNode(zipper)) return false;
 
         if(zipper.isEval() && PolyglotTreeHandler.getfilePathOfTreeHandler().containsKey(zipper.getCurrentTree())){
             if(zipper.down().isNull() || (listRootNodeType.contains(zipper.down().getType()) && zipper.getCurrentTree().equals(zipper.down().getCurrentTree()))){
@@ -41,10 +45,11 @@ public abstract class PolyglotDeepTreeProcessor implements PolyglotTreeProcessor
         Path nextPath = null;
         if(PolyglotTreeHandler.getfilePathOfTreeHandler().containsKey(next.getCurrentTree())) nextPath = PolyglotTreeHandler.getfilePathOfTreeHandler().get(next.getCurrentTree());
         while (!this.loopInSingleFile && !next.isNull() && !(zipper.getCurrentTree() != next.getCurrentTree() && nextPath != null && listPathsVisited.contains(nextPath))) {
-            this.process(next);
+            if(!this.processStoppable(next)) return false;
             next = next.right();
         }
+        return true;
     }
 
-    abstract public void processZipperNode(PolyglotZipper zipper);
+    abstract public boolean processZipperNode(PolyglotZipper zipper);
 }

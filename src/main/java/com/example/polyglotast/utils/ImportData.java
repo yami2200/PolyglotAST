@@ -5,46 +5,17 @@ import com.example.polyglotast.PolyglotZipper;
 
 import java.nio.file.Path;
 
-public class ImportData {
+public class ImportData extends PolyglotExpImpData{
 
-    private int char_pos;
-    private int line_pos;
-    private int char_pos_end;
-    private int line_pos_end;
-    private String var_name;
-    private Path filePath;
-    private String id;
+    public String storageVariable;
 
-    public Path getFilePath() {
-        return filePath;
-    }
-
-    public int getChar_pos() {
-        return char_pos;
-    }
-
-    public int getLine_pos() {
-        return line_pos;
-    }
-
-    public int getChar_pos_end() {
-        return char_pos_end;
-    }
-
-    public int getLine_pos_end() {
-        return line_pos_end;
-    }
-
-    public String getVar_name() {
-        return var_name;
-    }
-
-    public String getId() {
-        return id;
+    public String getStorageVariable() {
+        return storageVariable;
     }
 
     public ImportData(PolyglotZipper zipper) {
         this.var_name = "";
+        this.storageVariable = "";
         switch (zipper.getLang()) {
             case "python":
                 if (zipper.getBindingName().substring(0, 5).equals("name=")) {
@@ -56,6 +27,9 @@ public class ImportData {
             case "javascript":
                 this.var_name = zipper.getBindingName().substring(1).substring(0, zipper.getBindingName().length() - 2);
                 break;
+        }
+        if(zipper.left() != null && zipper.left().node != null && zipper.left().getType().equals("=") && zipper.left().left() != null && zipper.left().left().node != null){
+            this.storageVariable = zipper.left().left().getCode();
         }
         this.char_pos = zipper.getPosition().component2();
         this.line_pos = zipper.getPosition().component1();

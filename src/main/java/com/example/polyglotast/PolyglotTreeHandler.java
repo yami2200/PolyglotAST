@@ -1,6 +1,7 @@
 package com.example.polyglotast;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -10,6 +11,8 @@ import java.util.HashSet;
 import com.example.polyglotast.utils.FileNotFoundInfo;
 import jsitter.api.*;
 import kotlin.Pair;
+
+import javax.swing.text.Position;
 
 public class PolyglotTreeHandler {
     protected NodeType nodetype = new NodeType("source_file");
@@ -53,7 +56,7 @@ public class PolyglotTreeHandler {
         return results;
     }
 
-    public HashSet<PolyglotTreeHandler> getHostTrees(HashSet<PolyglotTreeHandler> visited){
+    private HashSet<PolyglotTreeHandler> getHostTrees(HashSet<PolyglotTreeHandler> visited){
         HashSet<PolyglotTreeHandler> results = new HashSet<>();
         visited.add(this);
         if(this.directParents.size() == 0){
@@ -80,7 +83,7 @@ public class PolyglotTreeHandler {
         return results;
     }
 
-    public HashSet<PolyglotTreeHandler> getSubTrees(HashSet<PolyglotTreeHandler> visited){
+    private HashSet<PolyglotTreeHandler> getSubTrees(HashSet<PolyglotTreeHandler> visited){
         HashSet<PolyglotTreeHandler> results = new HashSet<>();
         visited.add(this);
         results.add(this);
@@ -172,10 +175,50 @@ public class PolyglotTreeHandler {
         this.code = newcode;
         this.tree = parser.parse(new StringText(newcode), null);
         this.cursor = this.tree.getRoot().zipper();
+
         this.insideSubtree = false;
         this.filesNotFound.clear();
         this.clearLinkSubTrees();
         this.buildPolyglotTree(this.cursor);
+    }
+
+    /*
+        INCREMENTAL PARSING OF TREE
+        //TO-FIX : The parsing is still very slow on big files
+     */
+    public void reparsePolyglotTree(Pair<Integer, Integer> start, Pair<Integer, Integer> end, String text){
+        ArrayList<Edit> edits = new ArrayList<>();
+        Pair<Integer, Integer> startBytePos = getBytesAndCharacterLengthAtPosition(start.component1(), start.component2());
+        Pair<Integer, Integer> endBytePos = getBytesAndCharacterLengthAtPosition(end.component1(), end.component2());
+        String newCode = this.code.substring(0, startBytePos.component2()) + text + this.code.substring(endBytePos.component2());
+        Edit edit = new Edit(startBytePos.component1(), endBytePos.component1(), startBytePos.component1()+text.getBytes(StandardCharsets.UTF_8).length-1);
+        edits.add(edit);
+
+        this.tree = this.tree.adjust(edits);
+        this.code = newCode;
+        this.tree = parser.parse(new StringText(newCode), this.tree);
+
+        this.cursor = this.tree.getRoot().zipper();
+        this.insideSubtree = false;
+        this.filesNotFound.clear();
+        this.clearLinkSubTrees();
+        this.buildPolyglotTree(this.cursor);
+    }
+
+    private Pair<Integer, Integer> getBytesAndCharacterLengthAtPosition(int line, int chara){
+        int pos = 0;
+        int charp = 0;
+        String[] lines = this.code.split("(?<=\r\n|\r|\n)");
+        if(line>lines.length) return new Pair(-1, -1);
+        for(int i = 0; i< line; i++){
+            pos += (lines[i]).getBytes(StandardCharsets.UTF_8).length;
+            charp += (lines[i]).length();
+        }
+        if(line==lines.length) return new Pair(pos, charp);
+        if(chara > lines[line].length()) return new Pair(-1, -1);
+        pos += lines[line].substring(0, chara).getBytes(StandardCharsets.UTF_8).length;
+        charp += chara;
+        return new Pair(pos, charp);
     }
 
     public void clearLinkSubTrees(){
@@ -372,6 +415,7 @@ public class PolyglotTreeHandler {
      *         program
      */
     protected boolean isPolyglotEvalCall(Zipper<?> node) {
+        if(node == null || node.down() == null) return false;
         switch (this.parser.getLanguage().getName()) {
             case "python":
                 return node.getType().getName().equals("call") && node.down().getType().getName().equals("attribute")
@@ -405,6 +449,7 @@ public class PolyglotTreeHandler {
      *         program
      */
     public boolean isPolyglotImportCall(Zipper<?> node) {
+        if(node == null || node.down() == null) return false;
         switch (this.parser.getLanguage().getName()) {
             case "python":
                 return node.getType().getName().equals("call") && node.down().getType().getName().equals("attribute")
@@ -437,6 +482,7 @@ public class PolyglotTreeHandler {
      *         program
      */
     public boolean isPolyglotExportCall(Zipper<?> node) {
+        if(node == null || node.down() == null) return false;
         switch (this.parser.getLanguage().getName()) {
             case "python":
                 return node.getType().getName().equals("call") && node.down().getType().getName().equals("attribute")
@@ -626,6 +672,45 @@ public class PolyglotTreeHandler {
             }
         }
         return new Pair<>(lineCount, offset);
+    }
+
+    public Zipper<?> getNodeAtPosition(Pair<Integer, Integer> position){
+        return getNodeAtPosition(position, this.getRoot());
+    }
+
+    protected Zipper<?> getNodeAtPosition(Pair<Integer, Integer> position, Zipper<?> root){
+        Zipper<?> current = root;
+        Pair<Integer, Integer> currentPos = getNodePosition(root);
+        if(isPositionBeforeOrEqual(currentPos, position)){
+            if(current.right() != null){
+                Pair<Integer, Integer> newPos = getNodePosition(current.right());
+                while(isPositionBeforeOrEqual(newPos, position)){
+                    current = current.right();
+                    if(current.right() == null){
+                        if(current.down() == null){
+                            if(newPos.component2() + this.nodeToCode(current).length() > position.component2()) return current;
+                            return null;
+                        }
+                        return getNodeAtPosition(position, current.down());
+                    }
+                    newPos = getNodePosition(current.right());
+                }
+                if(current.down() == null){
+                    if(getNodePosition(current).component2() + this.nodeToCode(current).length() > position.component2()) return current;
+                    return null;
+                }
+                return getNodeAtPosition(position, current.down());
+            } else if(current.down() == null) {
+                if(currentPos.component2() + this.nodeToCode(current).length() > position.component2()) return current;
+                return null;
+            }
+            else return getNodeAtPosition(position, root.down());
+        }
+        return null;
+    }
+
+    private boolean isPositionBeforeOrEqual(Pair<Integer, Integer> pos1, Pair<Integer, Integer> pos2){
+        return pos1.component1() < pos2.component1() || (pos1.component1() == pos2.component1() && pos1.component2() <= pos2.component2());
     }
 
     // TODO : option for AST instead of CST ? (hide tokens)

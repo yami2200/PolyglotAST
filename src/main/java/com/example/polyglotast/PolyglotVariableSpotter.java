@@ -33,7 +33,7 @@ public class PolyglotVariableSpotter extends PolyglotDeepTreeProcessor {
     }
 
     @Override
-    public void processZipperNode(PolyglotZipper zipper) {
+    public boolean processZipperNode(PolyglotZipper zipper) {
         if(zipper.isImport()) {
             ImportData imp = new ImportData(zipper);
             String name = imp.getVar_name();
@@ -52,6 +52,7 @@ public class PolyglotVariableSpotter extends PolyglotDeepTreeProcessor {
                 this.exports.get(name).get(zipper.getCurrentTree()).add(exp);
             }
         }
+        return true;
     }
 
 }

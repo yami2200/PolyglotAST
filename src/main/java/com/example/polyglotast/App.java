@@ -1,26 +1,13 @@
 package com.example.polyglotast;
 
-import jsitter.api.Encoding;
-import jsitter.api.Text;
 import jsitter.api.Zipper;
-import org.jetbrains.annotations.NotNull;
+import kotlin.Pair;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.sql.SQLOutput;
 
 
 public class App {
@@ -155,12 +142,12 @@ public class App {
         tree.apply(visualizer);
         visualizer.save("multihost_v2.puml");*/
 
-        PolyglotTreeHandler tree;
+        /*PolyglotTreeHandler tree;
         long start = System.currentTimeMillis();
         //tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/test1_host.py")), "python");
         long finish = System.currentTimeMillis();
         long timeElapsed = finish - start;
-        System.out.println(timeElapsed);
+        System.out.println(timeElapsed);*/
 
         /*start = System.currentTimeMillis();
         PolyglotTreeHandler.filePathToTreeHandler = new HashMap<>();
@@ -178,7 +165,7 @@ public class App {
         timeElapsed = finish - start;
         System.out.println(timeElapsed);*/
 
-        System.out.println("JAVSCRIPT");
+        /*System.out.println("JAVSCRIPT");
 
         start = System.currentTimeMillis();
         PolyglotTreeHandler.filePathToTreeHandler = new HashMap<>();
@@ -188,7 +175,7 @@ public class App {
         //tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/example3_multihost_diag/host3.js")), "javascript");
         finish = System.currentTimeMillis();
         timeElapsed = finish - start;
-        System.out.println(timeElapsed);
+        System.out.println(timeElapsed);*/
 
         /*for(int i = 0; i<100; i++){
             start = System.currentTimeMillis();
@@ -204,5 +191,46 @@ public class App {
 
         /*PolyglotVariableSpotter varSpotter = new PolyglotVariableSpotter();
         tree.apply(varSpotter);*/
+
+        // Incremental Test
+        PolyglotTreeHandler tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/example0_vis/host.py")), "python");
+        Zipper<?> zip = tree.getNodeAtPosition(new Pair<>(3,0));
+        System.out.println((zip == null ? "null" : zip.getType() + " - " + new PolyglotZipper(tree, zip).getCode()));
+        if(zip != null) System.out.println(tree.getNodePosition(zip).component1() + " : "+tree.getNodePosition(zip).component2() +" to "+tree.getNodePosition(zip).component1() + " : "+(tree.getNodePosition(zip).component2()+tree.nodeToCode(zip).length()));
+
+        PolyglotTypeVisitor type = new PolyglotTypeVisitor(new PolyglotZipper(tree,zip));
+        tree.apply(type);
+        PolyglotTypeVisitor.TypingResult result = type.getTypeResult();
+        System.out.println(result.type);
+        System.out.println(result.typeResult);
+
+        PolyglotTreeVisualizer vis = new PolyglotTreeVisualizer();
+        tree.apply(vis);
+        vis.save("test.puml");
+
+
+        /*tree.reparsePolyglotTree(new Pair<>(1,0), new Pair<>(1,0), "//");
+        tree.apply(vis);
+        vis.save("vis2.puml");*/
+
+        /*
+        PolyglotTreeHandler tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/solo_80k.js")), "javascript");
+        for(int i = 0; i<10; i++){
+
+            tree.reparsePolyglotTree(new Pair<>(21,0), new Pair<>(21,0), "//");
+
+            tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/solo_80k.js")), "javascript");
+        }
+
+        for(int i = 0; i<10; i++){
+            String newCode = Files.readString(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/solo_80k.js")));
+            long start = System.currentTimeMillis();
+            tree.reparsePolyglotTree(newCode);
+            long finish = System.currentTimeMillis();
+            long timeElapsed = finish - start;
+            System.out.println(timeElapsed);
+            tree = new PolyglotTreeHandler(Paths.get(new URI("file:///home/romain/Desktop/VScode%20test%20extension/solo_80k.js")), "javascript");
+        }
+        */
     }
 }

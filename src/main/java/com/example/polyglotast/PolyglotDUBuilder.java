@@ -82,7 +82,7 @@ public class PolyglotDUBuilder extends PolyglotDeepTreeProcessor {
     }
 
     @Override
-    public void processZipperNode(PolyglotZipper zipper) {
+    public boolean processZipperNode(PolyglotZipper zipper) {
         if(zipper.isImport()){
             ImportData imp = new ImportData(zipper);
             if(!imp.getVar_name().equals("")){
@@ -111,6 +111,7 @@ public class PolyglotDUBuilder extends PolyglotDeepTreeProcessor {
                         PolyglotTreeHandler.getfilePathOfTreeHandler().get(zipper.getCurrentTree()));
             this.evalSameFile.add(line);
         }
+        return true;
     }
 
     private void computePotentialExportErrors(ExportData exp){

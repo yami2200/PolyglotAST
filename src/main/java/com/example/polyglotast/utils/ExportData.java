@@ -2,61 +2,62 @@ package com.example.polyglotast.utils;
 
 import com.example.polyglotast.PolyglotTreeHandler;
 import com.example.polyglotast.PolyglotZipper;
+import jsitter.api.Zipper;
+import kotlin.Pair;
 
 import java.nio.file.Path;
 
-public class ExportData {
+public class ExportData extends PolyglotExpImpData {
 
-    private int char_pos;
-    private int line_pos;
-    private int char_pos_end;
-    private int line_pos_end;
-    private String var_name;
-    private Path filePath;
-    private String id;
+    protected String type;
+    protected String expVar;
+    protected Pair<Integer, Integer> expVarPosition;
 
-    public Path getFilePath() {
-        return filePath;
+    public Pair<Integer, Integer> getExpVarPosition() {
+        return expVarPosition;
+    }
+    public String getType() {
+        return type;
+    }
+    public String getExpVar() {
+        return expVar;
     }
 
-    public int getChar_pos() {
-        return char_pos;
-    }
-
-    public int getLine_pos() {
-        return line_pos;
-    }
-
-    public int getChar_pos_end() {
-        return char_pos_end;
-    }
-
-    public int getLine_pos_end() {
-        return line_pos_end;
-    }
-
-    public String getVar_name() {
-        return var_name;
-    }
-
-    public String getId() {
-        return id;
-    }
 
     public ExportData(PolyglotZipper zipper) {
         this.var_name = "";
+        this.expVar = "";
         switch (zipper.getLang()) {
             case "python":
                 if (zipper.getCurrentTree().nodeToCode(zipper.down().right().down().right().down().node).equals("name")) { // export(name="..", value="..")
                     String name = zipper.getCurrentTree().nodeToCode(zipper.down().right().down().right().down().right().right().node);
                     this.var_name = name.substring(1, name.length() - 1);
+                    if (zipper.getCurrentTree().nodeToCode(zipper.down().right().down().right().right().right().down().node).equals("value")){
+                        this.type = zipper.down().right().down().right().right().right().down().right().right().node.getType().toString();
+                        if(this.type.equals("identifier")) {
+                            this.expVar = zipper.down().right().down().right().right().right().down().right().right().getCode();
+                            this.expVarPosition = zipper.down().right().down().right().right().right().down().right().right().getPosition();
+                        }
+                    }
                 } else if (zipper.getCurrentTree().nodeToCode(zipper.down().right().down().right().right().right().down().node).equals("name")) { // export(value="..", name="..")
                     String name = zipper.getCurrentTree().nodeToCode(zipper.down().right().down().right().right().right().down().right().right().node);
                     this.var_name = name.substring(1, name.length() - 1);
+                    if (zipper.getCurrentTree().nodeToCode(zipper.down().right().down().right().down().node).equals("value")){
+                        this.type = zipper.down().right().down().right().down().right().right().node.getType().toString();
+                        if(this.type.equals("identifier")) {
+                            this.expVar = zipper.down().right().down().right().down().right().right().getCode();
+                            this.expVarPosition = zipper.down().right().down().right().down().right().right().getPosition();
+                        }
+                    }
                 }
                 break;
             case "javascript":
                 this.var_name = zipper.getBindingName().substring(1).substring(0, zipper.getBindingName().length() - 2);
+                this.type = zipper.down().right().down().right().right().right().getType();
+                if(this.type.equals("identifier")) {
+                    this.expVar = zipper.down().right().down().right().right().right().getCode();
+                    this.expVarPosition =zipper.down().right().down().right().right().right().getPosition();
+                }
                 break;
         }
         this.char_pos = zipper.getPosition().component2();
@@ -65,6 +66,18 @@ public class ExportData {
         this.line_pos_end = zipper.down().right().down().right().right().right().right().getPosition().component1();
         this.filePath = PolyglotTreeHandler.getfilePathOfTreeHandler().get(zipper.getCurrentTree());
         this.id = filePath.toString() + this.char_pos + this.line_pos + this.var_name;
+        this.convertType(zipper);
     }
+
+    //TODO : handle binary_operator (2+2), function call, javascript object
+    public void convertType(PolyglotZipper zipper){
+        switch (zipper.getLang()) {
+            case "python":
+            case "javascript":
+                if(this.type.equals("true") || this.type.equals("false")) this.type = "boolean";
+                break;
+        }
+    }
+
 
 }
