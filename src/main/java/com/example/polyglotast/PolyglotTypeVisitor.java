@@ -14,12 +14,14 @@ public class PolyglotTypeVisitor extends PolyglotDeepTreeProcessor{
     private PolyglotZipper varZipper;
     private String varName;
     private ArrayList<Pair<String, PolyglotExpImpData>> listExpImp;
+    private Path path;
 
 
     public PolyglotTypeVisitor(PolyglotZipper zipper){
         this.varZipper = zipper;
         this.varName = zipper.getCode();
         this.listExpImp = new ArrayList<>();
+        this.path = PolyglotTreeHandler.getfilePathOfTreeHandler().get(zipper.getCurrentTree());
     }
 
     @Override
@@ -37,22 +39,6 @@ public class PolyglotTypeVisitor extends PolyglotDeepTreeProcessor{
 
     public TypingResult getTypeResult(){
         return getRecursiveTypeResult(this.varName, this.listExpImp.size(), null);
-        /*String importedName = "";
-        for (int i = this.listExpImp.size()-1; i>=0 ; i--){
-            if(this.listExpImp.get(i).component1().equals(this.varName)){
-                if(this.listExpImp.get(i).component2() instanceof ImportData && importedName.equals("")){
-                    importedName = this.listExpImp.get(i).component2().getVar_name();
-                }
-            }
-            if(this.listExpImp.get(i).component2() instanceof ExportData && this.listExpImp.get(i).component1().equals(importedName)){
-                ExportData exp = (ExportData) this.listExpImp.get(i).component2();
-                if(exp.getType().equals("identifier")){
-                    return this.getRecursiveTypeResult(exp.getExpVar(), i, exp);
-                }
-                return new TypingResult(exp.getType());
-            }
-        }
-        return new TypingResult();*/
     }
 
     private TypingResult getRecursiveTypeResult(String variableName, int maxIndex, ExportData exp){
@@ -60,7 +46,9 @@ public class PolyglotTypeVisitor extends PolyglotDeepTreeProcessor{
         for (int i = maxIndex-1; i>=0 ; i--){
             if(this.listExpImp.get(i).component1().equals(variableName)){
                 if(this.listExpImp.get(i).component2() instanceof ImportData && importedName.equals("")){
-                    importedName = this.listExpImp.get(i).component2().getVar_name();
+                    if((exp == null && this.listExpImp.get(i).component2().getFilePath().equals(path)) || (exp != null && exp.getFilePath().equals(this.listExpImp.get(i).component2().getFilePath()))){
+                        importedName = this.listExpImp.get(i).component2().getVar_name();
+                    }
                 }
             }
             if(this.listExpImp.get(i).component2() instanceof ExportData && this.listExpImp.get(i).component1().equals(importedName)){
