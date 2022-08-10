@@ -17,6 +17,6 @@ cp -r ../tree-sitter-python ../jsitter/native/grammars/
 cp -r ../tree-sitter-javascript ../jsitter/native/grammars/
 echo "Copied successfully !"
 
-../jsitter/make.sh
-cd ../jsitter/
-mvn install
+#../jsitter/make.sh
+#cd ../jsitter/
+#mvn install
