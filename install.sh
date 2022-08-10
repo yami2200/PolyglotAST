@@ -25,4 +25,7 @@ mvn install
 
 cd ..
 
-cp ./jsitter/native/build/linux-x86-64/*.so ./PolyglotAST/src/main/resources/
+mkdir ./PolyglotAST/src/main/java/com/resources/
+mkdir ./PolyglotAST/src/main/java/com/resources/linux-x86-64/
+cp ./jsitter/native/build/linux-x86-64/*.so ./PolyglotAST/src/main/java/com/resources/
+cp ./jsitter/native/build/linux-x86-64/*.so ./PolyglotAST/src/main/java/com/resources/linux-x86-64/
