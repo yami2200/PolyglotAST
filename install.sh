@@ -32,5 +32,9 @@ cp ./jsitter/native/build/linux-x86-64/*.so ./PolyglotAST/src/main/resources/lin
 
 cd ./PolyglotAST/
 
+mkdir -p /home/yami-mvn-repo/.m2/repository/polyglotast/PolyglotAST/1.0-SNAPSHOT/
+
 mvn clean compile
 mvn package
+
+cp ./target/PolyglotAST-1.0-SNAPSHOT.jar /home/yami-mvn-repo/.m2/repository/polyglotast/PolyglotAST/1.0-SNAPSHOT/PolyglotAST-1.0-SNAPSHOT.jar
