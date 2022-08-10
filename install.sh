@@ -22,3 +22,7 @@ echo "Copied successfully !"
 ../jsitter/make.sh
 cd ../jsitter/
 mvn install
+
+cd ..
+
+cp ./jsitter/native/build/linux-x86-64/*.so ./PolyglotAST/src/main/resources/
