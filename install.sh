@@ -33,3 +33,4 @@ cp ./jsitter/native/build/linux-x86-64/*.so ./PolyglotAST/src/main/resources/lin
 cd ./PolyglotAST/
 
 mvn clean compile
+mvn package
