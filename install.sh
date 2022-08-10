@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Script working if the directories match the directories from the docker container
-# If you are not using Docker, make sure to run the file after followed the dockerfile steps from https://github.com/yami2200/polyglot-language-server
+# If you are not using Docker, make sure to run this file (with sudo) after followed the dockerfile steps from https://github.com/yami2200/polyglot-language-server
 
 echo "Copying Tree sitter files into Jsitter ..."
 cp -r ../tree-sitter/* ../jsitter/native/tree-sitter/
@@ -32,9 +32,10 @@ cp ./jsitter/native/build/linux-x86-64/*.so ./PolyglotAST/src/main/resources/lin
 
 cd ./PolyglotAST/
 
-mkdir -p /home/yami-mvn-repo/.m2/repository/polyglotast/PolyglotAST/1.0-SNAPSHOT/
+mkdir -p /home/$USER/.m2/repository/polyglotast/PolyglotAST/1.0-SNAPSHOT/
 
 mvn clean compile
 mvn package
 
-cp ./target/PolyglotAST-1.0-SNAPSHOT.jar /home/yami-mvn-repo/.m2/repository/polyglotast/PolyglotAST/1.0-SNAPSHOT/PolyglotAST-1.0-SNAPSHOT.jar
+cp ./target/PolyglotAST-1.0-SNAPSHOT.jar /home/$USER/.m2/repository/polyglotast/PolyglotAST/1.0-SNAPSHOT/PolyglotAST-1.0-SNAPSHOT.jar
+cp ./target/PolyglotAST-1.0-SNAPSHOT.jar ../polyglot-language-server/lib/polyglotast/PolyglotAST/1.0-SNAPSHOT/PolyglotAST-1.0-SNAPSHOT.jar
