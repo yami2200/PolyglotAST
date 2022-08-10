@@ -12,13 +12,13 @@ sed -i '20iadd_library(tsjavascript SHARED grammars/tree-sitter-javascript/src/p
 echo ']]' >> ../jsitter/native/CMakeLists.txt
 echo "Edited successfully !"
 
-echo "Copying Tree sitter Python and javascript into jsitter/native/grammars ..."
+echo "Copying Tree sitter Python, javascript, java, go into jsitter/native/grammars ..."
 cp -r ../tree-sitter-python ../jsitter/native/grammars/
 cp -r ../tree-sitter-javascript ../jsitter/native/grammars/
+cp -r ../tree-sitter-go ../jsitter/native/grammars/
+cp -r ../tree-sitter-java ../jsitter/native/grammars/
 echo "Copied successfully !"
 
-export CC=/usr/bin/gcc
-export CXX=/usr/bin/g++
 ../jsitter/make.sh
 #cd ../jsitter/
 #mvn install
