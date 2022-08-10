@@ -38,4 +38,5 @@ mvn clean compile
 mvn package
 
 cp ./target/PolyglotAST-1.0-SNAPSHOT.jar /home/$USER/.m2/repository/polyglotast/PolyglotAST/1.0-SNAPSHOT/PolyglotAST-1.0-SNAPSHOT.jar
+mkdir -p ../polyglot-language-server/lib/polyglotast/PolyglotAST/1.0-SNAPSHOT/
 cp ./target/PolyglotAST-1.0-SNAPSHOT.jar ../polyglot-language-server/lib/polyglotast/PolyglotAST/1.0-SNAPSHOT/PolyglotAST-1.0-SNAPSHOT.jar
