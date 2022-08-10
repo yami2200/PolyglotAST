@@ -5,5 +5,5 @@
 
 echo "Copying Tree sitter files into Jsitter ..."
 cp ../tree-sitter/* ../jsitter/native/tree-sitter/
-echo "Copied successfully"
+echo "Copied successfully !"
 
