@@ -18,4 +18,5 @@ cp -r ../tree-sitter-javascript ../jsitter/native/grammars/
 echo "Copied successfully !"
 
 ../jsitter/make.sh
+cd ../jsitter/
 mvn install
