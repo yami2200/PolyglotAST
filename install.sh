@@ -20,5 +20,5 @@ cp -r ../tree-sitter-java ../jsitter/native/grammars/
 echo "Copied successfully !"
 
 ../jsitter/make.sh
-#cd ../jsitter/
-#mvn install
+cd ../jsitter/
+mvn install
