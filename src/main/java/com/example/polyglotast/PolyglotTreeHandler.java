@@ -399,7 +399,7 @@ public class PolyglotTreeHandler {
             newSubTree = filePathToTreeHandler.get(fileName);
             this.addLinkToSubtree(zipper, newSubTree);
         }
-        assert this.evalNodesToSubtreesMap.containsKey(node.getNode());
+        //assert this.evalNodesToSubtreesMap.containsKey(node.getNode());
     }
 
     public void addLinkToSubtree(Zipper<?> zipper, PolyglotTreeHandler tree){
