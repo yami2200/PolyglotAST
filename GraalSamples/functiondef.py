@@ -6,3 +6,6 @@ def foo(x, y):
 
 polyglot.export_value(value=foo, name='foo')
 
+variable1 = 42
+
+polyglot.export_value(value=variable1, name="variable")
