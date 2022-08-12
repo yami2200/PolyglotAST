@@ -36,13 +36,13 @@ public abstract class PolyglotDeepTreeProcessor implements PolyglotTreeProcessor
         this.loopInSingleFile = false;
         if(PolyglotTreeHandler.getfilePathOfTreeHandler().containsKey(zipper.getCurrentTree())) listPathsVisited.add(PolyglotTreeHandler.getfilePathOfTreeHandler().get(zipper.getCurrentTree()));
 
-        if(!this.processZipperNode(zipper)) return false;
-
         if(zipper.isEval() && PolyglotTreeHandler.getfilePathOfTreeHandler().containsKey(zipper.getCurrentTree())){
             if(zipper.down().isNull() || (listRootNodeType.contains(zipper.down().getType()) && zipper.getCurrentTree().equals(zipper.down().getCurrentTree()))){
                 this.loopInSingleFile = true;
             }
         }
+
+        if(!this.processZipperNode(zipper)) return false;
 
         PolyglotZipper next = zipper.down();
         Path nextPath = null;
