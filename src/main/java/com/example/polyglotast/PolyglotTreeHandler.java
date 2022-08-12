@@ -45,6 +45,10 @@ public class PolyglotTreeHandler {
         return filePathToTreeHandler;
     }
 
+    /**
+     * Return a set of all PolyglotTreeHandler that host this tree (is a root of this tree)
+     * @return set of all PolyglotTreeHandler that host this tree
+     */
     public HashSet<PolyglotTreeHandler> getHostTrees(){
         HashSet<PolyglotTreeHandler> results = new HashSet<>();
         HashSet<PolyglotTreeHandler> visited = new HashSet<>();
@@ -73,6 +77,10 @@ public class PolyglotTreeHandler {
         return results;
     }
 
+    /**
+     * Return a set of all PolyglotTreeHandler that are directly or not directly subtrees to this tree
+     * @returnset of all PolyglotTreeHandler that are directly or not directly subtrees to this tree
+     */
     public HashSet<PolyglotTreeHandler> getSubTrees(){
         HashSet<PolyglotTreeHandler> results = new HashSet<>();
         HashSet<PolyglotTreeHandler> visited = new HashSet<>();
@@ -171,6 +179,10 @@ public class PolyglotTreeHandler {
 
     }
 
+    /**
+     * Reparse the tree with a new code (used when a changed has been made to the code of this tree)
+     * @param newcode the code to parse for that tree
+     */
     public void reparsePolyglotTree(String newcode){
         this.code = newcode;
         this.tree = parser.parse(new StringText(newcode), null);

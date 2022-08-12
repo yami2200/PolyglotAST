@@ -24,6 +24,7 @@ public class PolyglotTypeVisitor extends PolyglotDeepTreeProcessor{
         this.path = PolyglotTreeHandler.getfilePathOfTreeHandler().get(zipper.getCurrentTree());
     }
 
+
     @Override
     public boolean processZipperNode(PolyglotZipper zipper) {
         if(zipper.node == this.varZipper.node) return false;
@@ -45,17 +46,22 @@ public class PolyglotTypeVisitor extends PolyglotDeepTreeProcessor{
         String importedName = "";
         for (int i = maxIndex-1; i>=0 ; i--){
             if(this.listExpImp.get(i).component1().equals(variableName)){
+                // The variable is imported
                 if(this.listExpImp.get(i).component2() instanceof ImportData && importedName.equals("")){
                     if((exp == null && this.listExpImp.get(i).component2().getFilePath().equals(path)) || (exp != null && exp.getFilePath().equals(this.listExpImp.get(i).component2().getFilePath()))){
                         importedName = this.listExpImp.get(i).component2().getVar_name();
                     }
                 }
             }
+            // The variable is exported and is later imported
             if(this.listExpImp.get(i).component2() instanceof ExportData && this.listExpImp.get(i).component1().equals(importedName)){
                 ExportData newExp = (ExportData) this.listExpImp.get(i).component2();
+                // variable exported with another variable value
                 if(newExp.getType().equals("identifier")){
+                    // recursive call to check the type of the variable exported
                     return this.getRecursiveTypeResult(newExp.getExpVar(), i, newExp);
                 }
+                // return the type of the value that was exported
                 return new TypingResult(newExp.getType());
             }
         }
@@ -92,7 +98,9 @@ public class PolyglotTypeVisitor extends PolyglotDeepTreeProcessor{
     }
 
     public enum TypeResultEnum {
-        UNKNOWN, VALUETYPE, EXPORTTYPE;
+        UNKNOWN, // unknown type
+        VALUETYPE, // The type of a value
+        EXPORTTYPE; // Hover location and file to hover to get the type of a variable
     }
 
 }

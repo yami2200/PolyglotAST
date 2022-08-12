@@ -3,6 +3,9 @@ package com.example.polyglotast;
 import java.nio.file.Path;
 import java.util.HashSet;
 
+/**
+ * PolyglotDeepTreeProcessor is a tree processor that will visit deeply all the polyglot tree (avoiding cycle) and calling processZipperNode to all nodes of the tree
+ */
 public abstract class PolyglotDeepTreeProcessor implements PolyglotTreeProcessor {
 
     private static HashSet<String> listRootNodeType;
@@ -51,5 +54,10 @@ public abstract class PolyglotDeepTreeProcessor implements PolyglotTreeProcessor
         return true;
     }
 
+    /**
+     * Process a polyglot zipper (called for each node of the tree)
+     * @param zipper the polyglot zipper to process
+     * @return false if you want to stop the processing of the rest of the tree
+     */
     abstract public boolean processZipperNode(PolyglotZipper zipper);
 }
