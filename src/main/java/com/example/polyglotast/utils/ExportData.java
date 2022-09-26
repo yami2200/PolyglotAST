@@ -31,6 +31,7 @@ public class ExportData extends PolyglotExpImpData {
             case "python":
                 if (zipper.getCurrentTree().nodeToCode(zipper.down().right().down().right().down().node).equals("name")) { // export(name="..", value="..")
                     String name = zipper.getCurrentTree().nodeToCode(zipper.down().right().down().right().down().right().right().node);
+                    this.var_name_position = zipper.down().right().down().right().down().right().right().getPosition();
                     this.var_name = name.substring(1, name.length() - 1);
                     if (zipper.getCurrentTree().nodeToCode(zipper.down().right().down().right().right().right().down().node).equals("value")){
                         this.type = zipper.down().right().down().right().right().right().down().right().right().node.getType().toString();
@@ -41,6 +42,7 @@ public class ExportData extends PolyglotExpImpData {
                     }
                 } else if (zipper.getCurrentTree().nodeToCode(zipper.down().right().down().right().right().right().down().node).equals("name")) { // export(value="..", name="..")
                     String name = zipper.getCurrentTree().nodeToCode(zipper.down().right().down().right().right().right().down().right().right().node);
+                    this.var_name_position = zipper.down().right().down().right().right().right().down().right().right().getPosition();
                     this.var_name = name.substring(1, name.length() - 1);
                     if (zipper.getCurrentTree().nodeToCode(zipper.down().right().down().right().down().node).equals("value")){
                         this.type = zipper.down().right().down().right().down().right().right().node.getType().toString();
@@ -53,13 +55,15 @@ public class ExportData extends PolyglotExpImpData {
                 break;
             case "javascript":
                 this.var_name = zipper.getBindingName().substring(1).substring(0, zipper.getBindingName().length() - 2);
+                this.var_name_position = zipper.down().right().down().right().getPosition();
                 this.type = zipper.down().right().down().right().right().right().getType();
                 if(this.type.equals("identifier")) {
                     this.expVar = zipper.down().right().down().right().right().right().getCode();
-                    this.expVarPosition =zipper.down().right().down().right().right().right().getPosition();
+                    this.expVarPosition = zipper.down().right().down().right().right().right().getPosition();
                 }
                 break;
         }
+        this.var_name_position = new Pair<>(this.var_name_position.component1(), this.var_name_position.component2() + 1); // remove (") or (') character position
         this.char_pos = zipper.getPosition().component2();
         this.line_pos = zipper.getPosition().component1();
         this.char_pos_end = zipper.down().right().down().right().right().right().right().getPosition().component2() + 1;

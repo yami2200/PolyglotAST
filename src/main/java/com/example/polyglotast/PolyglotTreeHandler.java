@@ -709,6 +709,7 @@ public class PolyglotTreeHandler {
                 }
                 if(current.down() == null){
                     if(getNodePosition(current).component2() + this.nodeToCode(current).length() > position.component2()) return current;
+                    if(current.up() != null && getNodePosition(current.up()).component2() + this.nodeToCode(current.up()).length() > position.component2()) return current.up();
                     return null;
                 }
                 return getNodeAtPosition(position, current.down());

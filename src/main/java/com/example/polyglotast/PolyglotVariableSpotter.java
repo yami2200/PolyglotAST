@@ -16,7 +16,6 @@ public class PolyglotVariableSpotter extends PolyglotDeepTreeProcessor {
 
     private HashMap<String, HashMap<PolyglotTreeHandler, ArrayList<ImportData>>> imports;
     private HashMap<String, HashMap<PolyglotTreeHandler, ArrayList<ExportData>>> exports;
-    private HashSet<Path> listPathsVisited;
 
     public PolyglotVariableSpotter() {
         super();
