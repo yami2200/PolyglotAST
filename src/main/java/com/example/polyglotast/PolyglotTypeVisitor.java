@@ -30,10 +30,14 @@ public class PolyglotTypeVisitor extends PolyglotDeepTreeProcessor{
         if(zipper.node == this.varZipper.node) return false;
         if(zipper.isImport()){
             ImportData data = new ImportData(zipper);
-            this.listExpImp.add(new Pair<>(data.getStorageVariable(), data));
+            if(!data.getStorageVariable().equals("") && data.storageVarPosition != null){
+                this.listExpImp.add(new Pair<>(data.getStorageVariable(), data));
+            }
         } else if(zipper.isExport()){
             ExportData exp = new ExportData(zipper);
-            this.listExpImp.add(new Pair<>(exp.getVar_name(), exp));
+            if(!exp.getVar_name().equals("")){
+                this.listExpImp.add(new Pair<>(exp.getVar_name(), exp));
+            }
         }
         return true;
     }

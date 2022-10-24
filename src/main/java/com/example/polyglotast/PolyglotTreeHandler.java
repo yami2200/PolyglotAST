@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import com.example.polyglotast.utils.FileNotFoundInfo;
+import com.example.polyglotast.utils.NodePosition;
 import jsitter.api.*;
 import kotlin.Pair;
 
@@ -20,6 +21,7 @@ public class PolyglotTreeHandler {
     protected String code;
     protected Parser<NodeType> parser;
     protected Tree<NodeType> tree;
+
     protected Zipper<?> cursor; // internal cursor for build and method calls; should not be used by an external
                                 // class, only for methods within the tree handler
     protected HashMap<Node<?>, PolyglotTreeHandler> evalNodesToSubtreesMap;
@@ -32,6 +34,11 @@ public class PolyglotTreeHandler {
 
     protected boolean insideSubtree; // indicates whether this.cursor is inside a sub tree, or still in the original
                                      // tree
+
+    public void clearTreeHandlerPathAndInstance(){
+        filePathOfTreeHandler.clear();
+        filePathToTreeHandler.clear();
+    }
 
     public HashSet<FileNotFoundInfo> getFilesNotFound() {
         return filesNotFound;
@@ -686,6 +693,27 @@ public class PolyglotTreeHandler {
         return new Pair<>(lineCount, offset);
     }
 
+    public NodePosition getNodePositionForMultipleRequest(Zipper<?> node, int previous_line, int previous_line_char) {
+        int pos = node.getByteOffset() / 2;
+        int length = node.getByteSize() / 2;
+        NodePosition result = new NodePosition();
+        int lineCount = previous_line;
+        int offset = 0;
+        int i = 0;
+        for (i = previous_line_char; i < pos; i++) {
+            if (this.code.charAt(i) == '\n') {
+                lineCount++;
+                offset = 0;
+            } else {
+                offset++;
+            }
+        }
+        result.previous_line = lineCount;
+        result.previous_line_char = i - offset;
+        result.position = new Pair<>(lineCount, offset);
+        return result;
+    }
+
     public Zipper<?> getNodeAtPosition(Pair<Integer, Integer> position){
         return getNodeAtPosition(position, this.getRoot());
     }
@@ -700,7 +728,7 @@ public class PolyglotTreeHandler {
                     current = current.right();
                     if(current.right() == null){
                         if(current.down() == null){
-                            if(newPos.component2() + this.nodeToCode(current).length() > position.component2()) return current;
+                            if(newPos.component2() + this.nodeToCode(current).length() > position.component2()) {return current;}
                             return null;
                         }
                         return getNodeAtPosition(position, current.down());
@@ -708,13 +736,16 @@ public class PolyglotTreeHandler {
                     newPos = getNodePosition(current.right());
                 }
                 if(current.down() == null){
-                    if(getNodePosition(current).component2() + this.nodeToCode(current).length() > position.component2()) return current;
-                    if(current.up() != null && getNodePosition(current.up()).component2() + this.nodeToCode(current.up()).length() > position.component2()) return current.up();
+                    if(getNodePosition(current).component2() + this.nodeToCode(current).length() > position.component2()){ return current; }
+                    if(current.up() != null && getNodePosition(current.up()).component2() + this.nodeToCode(current.up()).length() > position.component2()) { return current.up();};
                     return null;
                 }
                 return getNodeAtPosition(position, current.down());
             } else if(current.down() == null) {
-                if(currentPos.component2() + this.nodeToCode(current).length() > position.component2()) return current;
+
+                if(currentPos.component2() + this.nodeToCode(current).length() > position.component2()) {
+                    return current;
+                }
                 return null;
             }
             else return getNodeAtPosition(position, root.down());
@@ -723,7 +754,7 @@ public class PolyglotTreeHandler {
     }
 
     private boolean isPositionBeforeOrEqual(Pair<Integer, Integer> pos1, Pair<Integer, Integer> pos2){
-        return pos1.component1() < pos2.component1() || (pos1.component1() == pos2.component1() && pos1.component2() <= pos2.component2());
+        return pos1.component1() < pos2.component1() || (pos1.component1().equals(pos2.component1()) && pos1.component2() <= pos2.component2());
     }
 
     // TODO : option for AST instead of CST ? (hide tokens)

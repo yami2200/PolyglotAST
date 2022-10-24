@@ -51,6 +51,7 @@ public abstract class PolyglotDeepTreeProcessor implements PolyglotTreeProcessor
             if(!this.processStoppable(next)) return false;
             next = next.right();
         }
+        this.loopInSingleFile = false;
         return true;
     }
 
